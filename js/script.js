@@ -42,6 +42,19 @@ d3.json("data/data.json", function(error, root) {
     nodes = pack(root).descendants(),
     view;
 
+  var tooltip = d3
+    .select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+    .text("a simple tooltip");
+
   var circle = g
     .selectAll("circle")
     .data(nodes)
@@ -58,10 +71,21 @@ d3.json("data/data.json", function(error, root) {
     .style("fill", function(d) {
       return d.children ? color(d.depth) : null;
     })
+    .on("mouseover", function(d) {
+      console.log("d.data.name: " + d.data.name);
+      return tooltip.text(d.data.name).style("visibility", "visible");
+    })
+    .on("mousemove", function() {
+      return tooltip
+        .style("top", d3.event.pageY - 10 + "px")
+        .style("left", d3.event.pageX + 10 + "px");
+    })
+    .on("mouseout", function() {
+      return tooltip.style("visibility", "hidden");
+    })
     .on("click", function(d) {
       if (focus !== d) zoom(d), d3.event.stopPropagation();
     });
-  //.on("mouseover", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
 
   var text = g
     .selectAll("text")
@@ -81,13 +105,6 @@ d3.json("data/data.json", function(error, root) {
     .text(function(d) {
       return d.data.name;
     });
-  /*
-      .on("mouseover", function(d) {
-           d3.select(this).attr
-           //return d.parent === root ? "inline" : "inline";
-           //return d.parent === root ? "inline" : "inline";
-       });
-*/
 
   var node = g.selectAll("circle,text");
 
