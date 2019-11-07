@@ -1,0 +1,54 @@
+{
+  "name": "root",
+  "children": [
+    {
+      "name": "CMS Dataverse",
+      "size": 50,
+      "children": [
+        {
+          "name": "CMS Fabricated Data",
+          "size": 100
+        }
+      ]
+    },
+    {
+      "name": "Manchester Dataverse",
+      "size": 50,
+      "children": [
+        {
+          "name": "Dataset with Shapefiles, Images, and Tabular Files",
+          "size": 100
+        }
+      ]
+    },
+    {
+      "name": "ScholCommLab's Dataverse",
+      "size": 50,
+      "children": [
+        {
+          "name": "Text data for comparing the language used in Wikipedia, the DiabeticConnect Forum, and Research Articles",
+          "size": 100
+        }
+      ]
+    },
+    {
+      "name": "Ubiquity Press Dataverse",
+      "children": [
+        {
+          "name": "Journal of Open Psychology Data (JOPD) Dataverse",
+          "size": 100,
+          "children": [
+            {
+              "name": "Data from the BAFACALO project: The Brazilian Intelligence Battery based on two state-of-the-art models: Carroll's model and the CHC model.",
+              "size": 50
+            },
+            {
+              "name": "“Changes in test-taking patterns over time” concerning the Flynn Effect in Estonia",
+              "size": 25
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
