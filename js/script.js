@@ -14,7 +14,7 @@ var pack = d3.pack()
     // For nested circles, the distance between the circle itself and circles inside it.
     .padding(200);
 
-d3.json("flare.json", function(error, root) {
+d3.json("../data/flare.json", function(error, root) {
   if (error) throw error;
 
   root = d3.hierarchy(root)
