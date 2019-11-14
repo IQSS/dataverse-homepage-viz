@@ -1,10 +1,13 @@
 var svg = d3.select("svg"),
   // Margin between the outer box and the first level of circles.
-  margin = 20,
+  //margin = 20,
+  margin = 0,
   diameter = +svg.attr("width"),
+  width = +svg.attr("width"),
+  height = +svg.attr("height"),
   g = svg
     .append("g")
-    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 var color = d3
   .scaleLinear()
@@ -14,9 +17,9 @@ var color = d3
 
 var pack = d3
   .pack()
-  .size([diameter - margin, diameter - margin])
+  .size([width - margin, height - margin])
   // For nested circles, the distance between the circle itself and circles inside it.
-  .padding(200);
+  .padding(4);
 
 d3.json("data/data.json", function(error, root) {
   if (error) throw error;
@@ -33,7 +36,8 @@ d3.json("data/data.json", function(error, root) {
     .sort(function(a, b) {
       console.log("b: " + b.value + " a:" + a.value);
       // changes the orientation
-      return b.value - a.value;
+      //return b.value - a.value;
+      return Math.random();
     });
   //.sum(function(d) { return 10; });
   //.sort(function(a, b) { return b.value - a.value; });
