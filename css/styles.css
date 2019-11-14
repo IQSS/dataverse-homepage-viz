@@ -22,3 +22,7 @@
 .node--leaf {
   pointer-events: none;
 }
+
+.node--root {
+  display: none;
+}
