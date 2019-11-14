@@ -37,7 +37,13 @@ d3.json("data/data.json", function(error, root) {
       //console.log("b: " + b.value + " a:" + a.value);
       // changes the orientation
       //return b.value - a.value;
-      return Math.random();
+      //"The specified function is passed two nodes a and b to compare.
+      // If a should be before b, the function must return a value less than zero;
+      // if b should be before a, the function must return a value greater than zero;"
+      // -- https://github.com/d3/d3-hierarchy#node_sort
+      random = getRandomInt(-1, 1);
+      //console.log(random);
+      return random;
     });
   //.sum(function(d) { return 10; });
   //.sort(function(a, b) { return b.value - a.value; });
@@ -165,6 +171,12 @@ d3.json("data/data.json", function(error, root) {
     circle.attr("r", function(d) {
       return d.r * k;
     });
+  }
+
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
   }
 
   // not used but for wrapping long lines, we hope
