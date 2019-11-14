@@ -29,12 +29,12 @@ d3.json("data/data.json", function(error, root) {
     //.sum(function(d) { return d.size; })
     //
     .sum(function(d) {
-      console.log("d: " + d.name);
+      //console.log("d: " + d.name);
       //return d.size;
       return 10;
     })
     .sort(function(a, b) {
-      console.log("b: " + b.value + " a:" + a.value);
+      //console.log("b: " + b.value + " a:" + a.value);
       // changes the orientation
       //return b.value - a.value;
       return Math.random();
@@ -76,7 +76,7 @@ d3.json("data/data.json", function(error, root) {
       return d.children ? color(d.depth) : null;
     })
     .on("mouseover", function(d) {
-      console.log("d.data.name: " + d.data.name);
+      //console.log("d.data.name: " + d.data.name);
       return tooltip.text(d.data.name).style("visibility", "visible");
     })
     .on("mousemove", function() {
