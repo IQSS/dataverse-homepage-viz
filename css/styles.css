@@ -26,3 +26,18 @@
 .node--root {
   display: none;
 }
+
+.tooltip-details {
+  position: absolute;
+  z-index: 10;
+  opacity: 0;
+  background-color: white;
+  border: solid;
+  border-width: 2px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.vis-svg {
+  background: rgb(163, 245, 207);
+}
