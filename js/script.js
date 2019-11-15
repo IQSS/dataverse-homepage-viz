@@ -1,13 +1,13 @@
-var svg = d3.select("svg"),
-  // Margin between the outer box and the first level of circles.
-  //margin = 20,
-  margin = 0,
-  diameter = +svg.attr("width"),
-  width = +svg.attr("width"),
-  height = +svg.attr("height"),
-  g = svg
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+var svg = d3.select("svg");
+// Margin between the outer box and the first level of circles.
+// var margin = 20,
+var margin = 0;
+var diameter = +svg.attr("width");
+var width = +svg.attr("width");
+var height = +svg.attr("height");
+var g = svg
+  .append("g")
+  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 var color = d3
   .scaleLinear()
@@ -48,9 +48,9 @@ d3.json("data/data.json", function(error, root) {
   //.sum(function(d) { return 10; });
   //.sort(function(a, b) { return b.value - a.value; });
 
-  var focus = root,
-    nodes = pack(root).descendants(),
-    view;
+  var focus = root;
+  var nodes = pack(root).descendants();
+  var view;
 
   var tooltip = d3
     .select("body")
