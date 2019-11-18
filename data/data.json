@@ -2,72 +2,47 @@
   "name": "root",
   "children": [
     {
-      "name": "CMS Dataverse",
-      "size": 50,
-      "children": [
-        {
-          "name": "CMS Fabricated Data",
-          "size": 100
-        }
-      ]
-    },
-    {
       "name": "Eleni Castro Dataverse",
-      "size": 50,
       "children": [
         {
-          "name": "10+ FITS files and subsetted data files",
-          "size": 100
-        }
-      ]
-    },
-    {
-      "name": "Gary King Dataverse",
-      "size": 50,
-      "children": [
-        {
-          "name": "Cause of Death Data",
-          "size": 100
-        }
-      ]
-    },
-    {
-      "name": "HCPDS Dataverse",
-      "size": 50,
-      "children": [
-        {
-          "name": "Reproductive Health Laws Around the World",
-          "size": 100
+          "children": [],
+          "name": "10+ FITS files and subsetted data files"
         }
       ]
     },
     {
       "name": "Manchester Dataverse",
-      "size": 50,
       "children": [
         {
-          "name": "Dataset with Shapefiles, Images, and Tabular Files",
-          "size": 100
+          "children": [],
+          "name": "Dataset with Shapefiles, Images, and Tabular Files"
         }
       ]
     },
     {
-      "name": "Open Source at Harvard",
-      "size": 50,
+      "name": "HCPDS Dataverse",
       "children": [
         {
-          "name": "Open Source at Harvard - File Hierarchy, Descriptions, Tags and Restrictions",
-          "size": 100
+          "children": [],
+          "name": "Reproductive Health Laws Around the World"
+        }
+      ]
+    },
+    {
+      "name": "CMS Dataverse",
+      "children": [
+        {
+          "children": [],
+          "name": "CMS Fabricated Data"
         }
       ]
     },
     {
       "name": "ScholCommLab's Dataverse",
-      "size": 50,
       "children": [
         {
-          "name": "Text data for comparing the language used in Wikipedia, the DiabeticConnect Forum, and Research Articles",
-          "size": 100
+          "children": [],
+          "name": "Text data for comparing the language used in Wikipedia, the DiabeticConnect Forum, and Research Articles"
         }
       ]
     },
@@ -75,18 +50,48 @@
       "name": "Ubiquity Press Dataverse",
       "children": [
         {
-          "name": "Journal of Open Psychology Data (JOPD) Dataverse",
-          "size": 100,
           "children": [
             {
-              "name": "Data from the BAFACALO project: The Brazilian Intelligence Battery based on two state-of-the-art models: Carroll's model and the CHC model.",
-              "size": 50
+              "children": [],
+              "name": "\u201cChanges in test-taking patterns over time\u201d concerning the Flynn Effect in Estonia"
             },
             {
-              "name": "“Changes in test-taking patterns over time” concerning the Flynn Effect in Estonia",
-              "size": 25
+              "children": [],
+              "name": "Data from the BAFACALO project: The Brazilian Intelligence Battery based on two state-of-the-art models: Carroll's model and the CHC model."
             }
-          ]
+          ],
+          "name": "Journal of Open Psychology Data (JOPD) Dataverse"
+        }
+      ]
+    },
+    {
+      "name": "Open Source at Harvard",
+      "children": [
+        {
+          "children": [],
+          "name": "Open Source at Harvard - File Hierarchy, Descriptions, Tags and Restrictions"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "name": "Dataverse Installation Personas"
+                }
+              ],
+              "name": "Dataverse Installations"
+            }
+          ],
+          "name": "The Dataverse Project"
+        }
+      ]
+    },
+    {
+      "name": "Gary King Dataverse",
+      "children": [
+        {
+          "children": [],
+          "name": "Cause of Death Data"
         }
       ]
     }
