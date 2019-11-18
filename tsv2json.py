@@ -1,6 +1,7 @@
 import csv
 import json
 from collections import defaultdict
+from datetime import datetime
 '''
 fileid
 filename
@@ -20,12 +21,14 @@ file_publication_date
 dataset_publication_date
 '''
 data = defaultdict(dict)
+dates = defaultdict(dict)
+oldest_date = "9999-12-31"
 final = {}
 final['name'] = 'root'
 final['children'] = []
 seen = defaultdict(dict)
-#with open('data/files_big.tsv', newline='') as tsvfile:
-with open('data/files.tsv', newline='') as tsvfile:
+with open('data/files_big.tsv', newline='') as tsvfile:
+#with open('data/files.tsv', newline='') as tsvfile:
     reader = csv.DictReader(tsvfile, delimiter="\t")
     rows = [row for row in reader]
     for row in rows:
@@ -39,6 +42,12 @@ with open('data/files.tsv', newline='') as tsvfile:
         dv3name = row['dataverse_level_3_friendly_name']
         dv3id = row['dataverse_level_3_id']
         dv3alias = row['dataverse_level_3_alias']
+        dspubdate = row['dataset_publication_date']
+        dates[dv1name] = '0000-00-00'
+        if dspubdate > dates[dv1name]:
+            dates[dv1name] = dspubdate
+        if oldest_date > dspubdate:
+            oldest_date = dspubdate
         #print(fileid, dv3alias)
         if dv3alias == 'glw_3':
             continue
@@ -75,8 +84,10 @@ with open('data/files.tsv', newline='') as tsvfile:
             else:
                 data[dv1name][title] = 1
                 seen[dv1name + title] = 1
+        dates[dv1name] = dspubdate
 data_out = json.dumps(data, indent=2)
 #print(data_out)
+#print('oldest date', oldest_date)
 #exit(1)
 #for child_of_root in data:
 # for key, value in ourNewDict.items():
@@ -87,6 +98,12 @@ for corkey, corval in data.items():
     level1 = {}
     #level1['name'] = corkey + '-level1'
     level1['name'] = corkey
+    level1['date'] = dates[corkey]
+    timestamp_format = '%Y-%m-%d %H:%M:%S.%f'
+    t1 = datetime.strptime(oldest_date, timestamp_format)
+    t2 = datetime.strptime(dates[corkey], timestamp_format)
+    days = t2 - t1
+    level1['diff'] = days.days
     level1['children'] = []
     # gcor = "grandchild of root"
     for gcorkey, gcorval in corval.items():
