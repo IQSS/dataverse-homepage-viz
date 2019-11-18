@@ -1,8 +1,12 @@
 var allData = {};
 var circlepack;
 
-function loadData(){
-  d3.json("data/data_big.json", function(error, data) {
+async function loadData(){
+
+  const getConfig = await fetch('config.json');
+  const config = await getConfig.json();
+
+  d3.json(config.datafile, function(error, data) {
     if (error){
       throw error;
     } else {
