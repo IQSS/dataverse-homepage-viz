@@ -93,15 +93,16 @@ Circlepack.prototype.wrangleData = function(){
     })
     .sort(function(a, b) {
       //console.log("b: " + b.value + " a:" + a.value);
+      return b.data.diff - a.data.diff;
       // changes the orientation
       //return b.value - a.value;
       //"The specified function is passed two nodes a and b to compare.
       // If a should be before b, the function must return a value less than zero;
       // if b should be before a, the function must return a value greater than zero;"
       // -- https://github.com/d3/d3-hierarchy#node_sort
-      random = getRandomInt(-1, 1);
+      //random = getRandomInt(-1, 1);
       //console.log(random);
-      return random;
+      //return random;
     });
 
     // Config pack function
@@ -144,10 +145,28 @@ Circlepack.prototype.updateVis = function(){
         : "node node--root";
     })
     .style("fill", function(d){
+        if (d.data.name == "invisible") {
+            //rgb(163, 245, 207) // invisible
+            return "#a3f5cf"; // background (invisible)
+            //return "#000000"; // black
+            //return null;
+        } else {
       return d.children ? vis.color(d.depth) : null;
+            }
     })
     .on("mouseover", function(d) {
-      vis.tooltip.html(`<div id="tooltip-text">${d.data.name}</div>`);
+      //console.log(${d.data.date});
+      //console.log(d.data.date);
+      optional_date = "";
+      if (d.data.date) {
+        optional_date = "<br>" + d.data.date;
+      }
+      optional_debug = "";
+      if (d.data.debug) {
+        optional_debug = "<br>" + d.data.debug;
+      }
+      //vis.tooltip.html(`<div id="tooltip-text">${d.data.name}<br>${d.data.date}</div>`);
+      vis.tooltip.html(`<div id="tooltip-text">${d.data.name}${optional_date}${optional_debug}</div>`);
       vis.tooltip.transition()
         .duration(300)
         .style("opacity", 1)

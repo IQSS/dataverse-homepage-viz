@@ -135,5 +135,31 @@ for corkey, corval in data.items():
         level1['children'].append(level2)
 #            level2 = {}
     final['children'].append(level1)
+
+def get_num_invisible_children(num_days):
+    if num_days >= 400:
+        #return 2
+        # no ghost circles in the center
+        return 0
+    elif num_days >= 200:
+        return 10
+    else:
+        #return 100
+        return 0
+
+#days_in_a_year = 365
+days_of_invisible_circles = 600
+invisible_child = {}
+invisible_child['name'] = 'middle child'
+#for i in range(1, days_in_a_year):
+for i in range(1, days_of_invisible_circles):
+    invisible = {}
+    invisible['name'] = "invisible"
+    invisible['debug'] = "invisible" + str(i)
+    invisible['diff'] = i
+    invisible['children'] = []
+    for i in range(1, get_num_invisible_children(i)):
+        invisible['children'].append(invisible_child)
+    final['children'].append(invisible)
 final_out = json.dumps(final, indent=2)
 print(final_out)
