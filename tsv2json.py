@@ -48,15 +48,6 @@ with open('data/files_big.tsv', newline='') as tsvfile:
             dates[dv1name] = dspubdate
         if oldest_date > dspubdate:
             oldest_date = dspubdate
-        #print(fileid, dv3alias)
-        if dv3alias == 'glw_3':
-            continue
-        if dv3alias == 'ABDAssessments_Malawi':
-            continue
-        if dv3alias == 'ABDAssessments_India':
-            continue
-        if dv3alias == 'ABDAssessments_Mali':
-            continue
         title = row['dataset_name']
         #print("%-20s > %-20s > %-20s > %-20s > %-20s" % (dv1name[:20], dv2name[:20], dv3name[:20], title[:20], filename[:20]))
         if dv3name:
