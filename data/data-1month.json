@@ -1,0 +1,912 @@
+{
+  "name": "root",
+      "children": [
+        {
+          "children": [],
+          "date": "2018-11-29 18:22:49.117",
+          "diff": 331,
+          "name": "Hedging Data on manufacturing firms"
+        },
+        {
+          "children": [],
+          "date": "2018-11-29 16:55:16.307",
+          "diff": 331,
+          "name": "Replication Data for: The psychology of state repression: Fear and dissent decisions in Zimbabwe."
+        },
+        {
+          "children": [],
+          "date": "2018-11-29 09:37:46.2",
+          "diff": 330,
+          "name": "Burglary crime rates and clearance rates in Germany at the regional level"
+        },
+        {
+          "children": [],
+          "date": "2018-11-29 07:54:46.595",
+          "diff": 330,
+          "name": "Replication Data for: The Multi-country PROMOTE HIV Antiretroviral Treatment Observational Cohort in Sub-Saharan Africa: Objectives, Design, and Baseline Findings"
+        },
+        {
+          "children": [],
+          "date": "2018-11-29 05:48:53.821",
+          "diff": 330,
+          "name": "Simulation examples for the scenarios and random generated scenarios"
+        },
+        {
+          "children": [],
+          "date": "2018-11-28 13:33:29.098",
+          "diff": 330,
+          "name": "Replication Data for: Resisting Democracy Assistance: Who Seeks and Receives Technical Election Assistance?"
+        },
+        {
+          "children": [],
+          "date": "2018-11-28 13:25:20.56",
+          "diff": 330,
+          "name": "Replication Data for: Beyond positive and negative: New perspectives on feedback effects in public opinion on the welfare state"
+        },
+        {
+          "children": [],
+          "date": "2018-11-28 08:54:43.668",
+          "diff": 329,
+          "name": "Global anti-dumping incident against China Steel"
+        },
+        {
+          "children": [],
+          "date": "2018-11-28 04:48:44.873",
+          "diff": 329,
+          "name": "Suppressing the Chills: Self-reports, physiological and psychoacoustic correlates"
+        },
+        {
+          "children": [],
+          "date": "2018-11-27 10:00:52.683",
+          "diff": 328,
+          "name": "USPTO Redbook Patent Data 1976-2012"
+        },
+        {
+          "children": [],
+          "date": "2018-11-27 09:49:14.138",
+          "diff": 328,
+          "name": "Parameters for adsorption of (CWA) chemical warfare agents and CWA simulants"
+        },
+        {
+          "children": [],
+          "date": "2018-11-27 04:44:04.172",
+          "diff": 328,
+          "name": "Replication Data for:   LeftVentricle.exe"
+        },
+        {
+          "children": [],
+          "date": "2018-11-26 15:59:47.415",
+          "diff": 328,
+          "name": "The Philadelphia story: Age, race, gender and changing travel trends"
+        },
+        {
+          "children": [],
+          "date": "2018-11-26 12:30:02.355",
+          "diff": 328,
+          "name": "High prevalence of strabismic visual field expansion in pediatric homonymous hemianopia"
+        },
+        {
+          "children": [],
+          "date": "2018-11-26 10:38:11.761",
+          "diff": 327,
+          "name": "Replication Data for: Blue Endorsements Matter: How the Fraternal Order of Police Contributed to Donald Trump\u2019s Victory"
+        },
+        {
+          "children": [],
+          "date": "2018-11-25 19:14:16.459",
+          "diff": 327,
+          "name": "Replication Data for When in Doubt Throw it Out"
+        },
+        {
+          "children": [],
+          "date": "2018-11-25 19:07:40.763",
+          "diff": 327,
+          "name": "Replication Data for: The casual impact of HACCP on seafood imports in the U.S.: An application of difference-in-differneces within the gravity model"
+        },
+        {
+          "children": [],
+          "date": "2018-11-25 11:39:56.735",
+          "diff": 326,
+          "name": "Early Modern East Asian Dataset v3.0"
+        },
+        {
+          "children": [],
+          "date": "2018-11-25 05:56:43.946",
+          "diff": 326,
+          "name": "CNAplot"
+        },
+        {
+          "children": [],
+          "date": "2018-11-24 20:05:30.664",
+          "diff": 326,
+          "name": "Housing finance: impact of heavy interest income tax"
+        },
+        {
+          "children": [],
+          "date": "2018-11-23 12:06:44.229",
+          "diff": 324,
+          "name": "Non-binding Peer Review and Effort in Teams: Evidence from a Field Experiment"
+        },
+        {
+          "children": [],
+          "date": "2018-11-23 01:36:36.983",
+          "diff": 324,
+          "name": "Replication Data for: PONE-D-18-19666R1"
+        },
+        {
+          "children": [],
+          "date": "2018-11-22 20:58:55.366",
+          "diff": 324,
+          "name": "Replication Data for: SMARThealth India"
+        },
+        {
+          "children": [],
+          "date": "2018-11-22 14:21:39.574",
+          "diff": 324,
+          "name": "Data for \"The Partisan Composition of Cantonal Governments in Switzerland, 1848-2017. A New Data Set\""
+        },
+        {
+          "children": [],
+          "date": "2018-11-21 22:31:01.078",
+          "diff": 323,
+          "name": "Strengths and Difficulties Questionnaire"
+        },
+        {
+          "children": [],
+          "date": "2018-11-21 13:35:29.176",
+          "diff": 323,
+          "name": "Replication Data for: \"Health-Seeking Amidst Violence: Evidence from the Philippines\""
+        },
+        {
+          "children": [],
+          "date": "2018-11-21 03:51:18.513",
+          "diff": 322,
+          "name": "Multiple Myeloma set 1"
+        },
+        {
+          "children": [],
+          "date": "2018-11-20 02:15:01.061",
+          "diff": 321,
+          "name": "The Prognostic Value of Optic Nerve Sheath Diameter in Patients with Subarachnoid Hemorrhage"
+        },
+        {
+          "children": [],
+          "date": "2018-11-19 16:50:05.215",
+          "diff": 321,
+          "name": "Replication Data for: Spin Transport in a Mott Insulator of Ultracold Fermions"
+        },
+        {
+          "children": [],
+          "date": "2018-11-19 00:28:58.195",
+          "diff": 320,
+          "name": "Bacterial Community composition within the Beverley aquifer system, South Australia"
+        },
+        {
+          "children": [],
+          "date": "2018-11-18 16:33:59.04",
+          "diff": 320,
+          "name": "Partisan Bias Scores for Web Domains"
+        },
+        {
+          "children": [],
+          "date": "2018-11-17 15:00:58.821",
+          "diff": 319,
+          "name": "Replication Data for: How the Alternative for Germany (AfD) and their voters veered to the radical right, 2013-2017"
+        },
+        {
+          "children": [],
+          "date": "2018-11-15 19:42:13.278",
+          "diff": 317,
+          "name": "Narrative inquiry of Justin Trudeau's speech 'Je t'aime, Papa\""
+        },
+        {
+          "children": [],
+          "date": "2018-11-15 15:20:49.54",
+          "diff": 317,
+          "name": "Replication Data for: Where\u2019s the Pivot? Obstruction and Lawmaking in the Pre-cloture Senate"
+        },
+        {
+          "children": [],
+          "date": "2018-11-15 05:25:51.916",
+          "diff": 316,
+          "name": "Demographics and anthropometrics data of of Samarinda Sarong female weavers"
+        },
+        {
+          "children": [],
+          "date": "2018-11-15 02:21:36.33",
+          "diff": 316,
+          "name": "Machine learn for glaucoma"
+        },
+        {
+          "children": [],
+          "date": "2018-11-14 15:28:23.821",
+          "diff": 316,
+          "name": "Bike Share Strike Data"
+        },
+        {
+          "children": [],
+          "date": "2018-11-13 21:32:48.926",
+          "diff": 315,
+          "name": "Replication Data for: How much is social media worth? Estimating the value of Facebook by paying users to stop using it."
+        },
+        {
+          "children": [],
+          "date": "2018-11-13 15:36:19.991",
+          "diff": 315,
+          "name": "Prediction of findings at screening colonoscopy using a machine learning algorithm "
+        },
+        {
+          "children": [],
+          "date": "2018-11-12 19:43:55.362",
+          "diff": 314,
+          "name": "Demographic Data & CBCL/4-18 Scores-Behavioural and Emotional Issues among Primary School Pupils with Congenital Colour Vision Deficiency in Federal Territory of Kuala Lumpur, Malaysia."
+        },
+        {
+          "children": [],
+          "date": "2018-11-12 16:49:33.348",
+          "diff": 314,
+          "name": "Supplementary table from \"Contribution of ultra-processed foods to energy and nutrient supply in mexican households\""
+        },
+        {
+          "children": [],
+          "date": "2018-11-12 06:30:12.425",
+          "diff": 313,
+          "name": "Replication Data for: IS SJ\u00d6GREN\u2019S SYNDROME DRY EYE SIMILAR TO DRY EYE CAUSED BY OTHER ETIOLOGIES? DISCRIMINATING DIFFERENT DISEASES BY DRY EYE TESTS"
+        },
+        {
+          "children": [],
+          "date": "2018-11-11 14:38:14.774",
+          "diff": 313,
+          "name": "Documentary about vivax malaria in Brazil Amazon"
+        },
+        {
+          "children": [],
+          "date": "2018-11-11 03:18:55.333",
+          "diff": 312,
+          "name": "Impact of characteristics of L1 literacy experience on picture processing:  ERP data from trilingual non-native Chinese and English readers"
+        },
+        {
+          "children": [],
+          "date": "2018-11-10 23:19:42.76",
+          "diff": 312,
+          "name": "Online appendix and replication data for: The Economic Impact of Anti-corruption Campaigns: New Materials for New Research Agendas in China "
+        },
+        {
+          "children": [],
+          "date": "2018-11-10 17:03:16.171",
+          "diff": 312,
+          "name": "Individual differences in rate of acquiring stable neural representations of tasks in fMRI"
+        },
+        {
+          "children": [],
+          "date": "2018-11-10 16:36:10.592",
+          "diff": 312,
+          "name": "Social entrepreneurship in opinion of company leaders and representatives of stakeholders"
+        },
+        {
+          "children": [],
+          "date": "2018-11-09 10:18:23.874",
+          "diff": 310,
+          "name": "Replication Data for: Controls on the formation of lunar multiring basins"
+        },
+        {
+          "children": [],
+          "date": "2018-11-09 09:18:00.334",
+          "diff": 310,
+          "name": "Democratization Articles Dataset"
+        },
+        {
+          "children": [],
+          "date": "2018-11-08 11:21:09.048",
+          "diff": 309,
+          "name": "Replication Data for: Dynamic Roll Call Analysis of Parties\u2019 Ideological Positions in the Czech Republic"
+        },
+        {
+          "children": [],
+          "date": "2018-11-08 00:42:16.514",
+          "diff": 309,
+          "name": "Replication Data for: Statistical Characterization and Modeling of Noise Effects in Near-Ultrasound Aerial Acoustic Communications"
+        },
+        {
+          "children": [],
+          "date": "2018-11-07 14:39:21.411",
+          "diff": 309,
+          "name": "Replication Data for: Family planning continuation among the urban poor in Senegal"
+        },
+        {
+          "children": [],
+          "date": "2018-11-07 05:27:48.261",
+          "diff": 308,
+          "name": "Dataset for \"Customer Feedback Text Analysis for Online Stores Reviews in Bulgarian\""
+        },
+        {
+          "children": [],
+          "date": "2018-11-07 02:43:38.906",
+          "diff": 308,
+          "name": "Replication Data for: Relationship between hemodynamic parameters and severity of ischemia-induced left"
+        },
+        {
+          "children": [],
+          "date": "2018-11-07 02:43:11.227",
+          "diff": 308,
+          "name": "Replication Data for: The effect of pralidoxime on coronary perfusion pressure during cardiopulmonary resuscitation in a pig model"
+        },
+        {
+          "children": [],
+          "date": "2018-11-06 17:19:46.404",
+          "diff": 308,
+          "name": "Replication Data for: Social Networks and Protest Participation"
+        },
+        {
+          "children": [],
+          "date": "2018-11-06 10:05:26.517",
+          "diff": 307,
+          "name": "Replication Data for: \"Does the UN Human Rights Council Help or Hurt on Religious Repression\""
+        },
+        {
+          "children": [],
+          "date": "2018-11-06 07:58:31.697",
+          "diff": 307,
+          "name": "Code for \"Image-Based Classification of Plant Genus and Family for Trained and Untrained Plant Species\""
+        },
+        {
+          "children": [],
+          "date": "2018-11-05 20:39:29.732",
+          "diff": 307,
+          "name": "Gridded emissions and land\u2010use data 2005\u20132100: Broad range of socioeconomic and climate mitigation assumptions"
+        },
+        {
+          "children": [],
+          "date": "2018-11-05 17:50:59.525",
+          "diff": 307,
+          "name": "Cost effectiveness model for mobile ear screening and surveillance service"
+        },
+        {
+          "children": [],
+          "date": "2018-11-05 16:53:57.976",
+          "diff": 307,
+          "name": "PLOS ONE Population Segmentation Paper Dataset"
+        },
+        {
+          "children": [],
+          "date": "2018-11-05 10:55:55.39",
+          "diff": 306,
+          "name": "Replication Data for: Constituent Approval, Electoral Marginality and Congressional Support for the President, Presidenital Studies Quarterly, vol 48, no 2, June, 2018, pp. 202-224"
+        },
+        {
+          "children": [],
+          "date": "2018-11-05 10:26:45.811",
+          "diff": 306,
+          "name": "Revenue and Expenses for Nonprofit News Orgs"
+        },
+        {
+          "children": [],
+          "date": "2018-11-05 09:30:19.801",
+          "diff": 306,
+          "name": "DNA Punctuation: Genome Annotations with Stem-Loop Structures. part2"
+        },
+        {
+          "children": [],
+          "date": "2018-11-04 10:02:14.516",
+          "diff": 305,
+          "name": "Replication Data for: The Impact of Mass-Level Ideological Orientations on Immigration Policy Preferences over Time"
+        },
+        {
+          "children": [],
+          "date": "2018-11-03 10:36:22.606",
+          "diff": 304,
+          "name": "3D Correlation of Solid-State NMR Parameters for Alumina - 3D interactive chart"
+        },
+        {
+          "children": [],
+          "date": "2018-11-03 06:55:27.885",
+          "diff": 304,
+          "name": "The Effect of Vitamin C on the Flavivirus"
+        },
+        {
+          "children": [],
+          "date": "2018-11-02 15:49:08.474",
+          "diff": 304,
+          "name": "Replication Data for: Touching Beliefs: Using Touchscreen Technology to Elicit Subjective Expectations in Survey Research"
+        },
+        {
+          "children": [],
+          "date": "2018-11-02 14:18:26.349",
+          "diff": 304,
+          "name": "Data for: Insulin Reduces Reaction of Follicular Granulosa Cell to FSH Stimulation in Obesity-Related Infertility Women during IVF"
+        },
+        {
+          "children": [],
+          "date": "2018-11-02 13:01:23.301",
+          "diff": 304,
+          "name": "Replication Data to \"Are average years of education losing predictive power for economic growth? An alternative measure through Structural Equations Modeling\u201d"
+        },
+        {
+          "children": [],
+          "date": "2018-11-02 10:48:35.491",
+          "diff": 303,
+          "name": "Replication Data for: \"World Economy, Political Control, and Presidential Success.\" The Journal of Politics"
+        },
+        {
+          "children": [],
+          "date": "2018-11-01 12:44:23.445",
+          "diff": 303,
+          "name": "Replication Data for: Does Exposure to the Refugee Crisis Make Natives More Hostile?"
+        },
+    {
+      "name": "Historical Ice Core Project - Initiative For the Science of the Human Past at Harvard Dataverse",
+      "date": "2018-11-29 11:18:35.356",
+      "diff": 332,
+      "children": [
+        {
+          "children": [],
+          "name": "Colle Gnifetti Ice Core - IC Cl record - Climate Change Institute - University of Maine"
+        },
+        {
+          "children": [],
+          "name": "Colle Gnifetti Ice Core - d18O and Ca (Oxygen isotopes, Calcium - temperature proxies) record - Climate Change Institute - University of Maine - University of Heidelberg"
+        },
+        {
+          "children": [],
+          "name": "Colle Gnifetti Ice Core - ICPMS Bi record 600-825 C.E. - Climate Change Institute - University of Maine"
+        }
+      ]
+    },
+    {
+      "name": "Lauren Young Dataverse",
+      "date": "2018-11-29 17:24:38.069",
+      "diff": 332,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: Cooperation, information, and keeping the peace: Civilian engagement with peacekeepers in Haiti"
+        }
+      ]
+    },
+    {
+      "name": "MEDSL Dataverse",
+      "date": "2018-09-10 11:22:44.492",
+      "diff": 252,
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "name": "State Office-Level Returns 2016"
+                }
+              ],
+              "name": "State Elections"
+            }
+          ],
+          "name": "MEDSL Election Returns Dataverse"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "EPI Full Reproduction Files"
+            },
+            {
+              "children": [],
+              "name": "Elections Performance Index Indicators 2008\u20132016"
+            },
+            {
+              "children": [],
+              "name": "Elections Performance Index 2016"
+            }
+          ],
+          "name": "Elections Performance Index Dataverse"
+        }
+      ]
+    },
+    {
+      "name": "Martijn  Schoonvelde Dataverse",
+      "date": "2018-11-29 04:54:11.458",
+      "diff": 331,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: Media Freedom and the Institutional Underpinnings of Political Knowledge"
+        },
+        {
+          "children": [],
+          "name": "Replication Data for: Liberals lecture, conservatives communicate."
+        }
+      ]
+    },
+    {
+      "name": "Creative Ideas Project/Shelly Gable and Jonathan Schooler Dataverse",
+      "date": "2018-11-20 18:25:12.697",
+      "diff": 323,
+      "children": [
+        {
+          "children": [],
+          "name": "Creativity Paper Materials Study 1 and 2"
+        },
+        {
+          "children": [],
+          "name": "Study 1 and Study 2 of Creativity Project "
+        }
+      ]
+    },
+    {
+      "name": "MilkyWay3D Dataverse",
+      "date": "2018-11-28 15:03:40.609",
+      "diff": 331,
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "HOPS Catalogs: Spectral Line"
+            }
+          ],
+          "name": "H2O Southern Galactic Plane Survey (HOPS) Dataverse"
+        }
+      ]
+    },
+    {
+      "name": "New Haven Independent Dataverse",
+      "date": "2018-11-28 13:33:28.767",
+      "diff": 331,
+      "children": [
+        {
+          "children": [],
+          "name": "New Haven Crime Data, 2006-2014"
+        }
+      ]
+    },
+    {
+      "name": "Noelline Tsafack Dataverse",
+      "date": "2018-11-28 06:32:49.244",
+      "diff": 331,
+      "children": [
+        {
+          "children": [],
+          "name": "Data_Carabidae in China Grasslands"
+        }
+      ]
+    },
+    {
+      "name": "Christopher Weber Dataverse",
+      "date": "2018-11-26 12:18:58.91",
+      "diff": 329,
+      "children": [
+        {
+          "children": [],
+          "name": "Exploring the Psychological Foundations of Ideological and Social Sorting"
+        }
+      ]
+    },
+    {
+      "name": "Sophisticated Ways Dataverse",
+      "date": "2018-11-26 08:39:41.015",
+      "diff": 329,
+      "children": [
+        {
+          "children": [],
+          "name": "SHA-1 Graph Visualization"
+        }
+      ]
+    },
+    {
+      "name": "Thomas Mustillo Dataverse",
+      "date": "2018-11-25 15:38:51.94",
+      "diff": 328,
+      "children": [
+        {
+          "children": [],
+          "name": "Online Appendices for \"Measures and votes: Party performance under free list proportional representation with evidence from Ecuador\""
+        }
+      ]
+    },
+    {
+      "name": "Rahsaan Maxwell Dataverse",
+      "date": "2018-11-23 10:32:27.181",
+      "diff": 326,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: Cosmopolitan immigration attitudes in large European cities: Contextual or compositional effects?"
+        },
+        {
+          "children": [],
+          "name": "Replication Data for: Cosmopolitan immigration attitudes in large European cities:Contextual or compositional effects?"
+        },
+        {
+          "children": [],
+          "name": "Replication Code for: Cosmopolitan immigration attitudes in large European cities: Contextual or compositional effects?"
+        }
+      ]
+    },
+    {
+      "name": "Cristina Bucur Dataverse",
+      "date": "2018-11-22 11:14:34.038",
+      "diff": 325,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for \"Presidential Partisanship in Government Formation: Do Presidents Favor Their Parties When They Appoint the Prime Minister?\""
+        },
+        {
+          "children": [],
+          "name": "Replication Data for Cabinet payoffs in coalition governments A time-varying measure of portfolio importance"
+        }
+      ]
+    },
+    {
+      "name": "Syria data",
+      "date": "2018-11-22 06:17:05.335",
+      "diff": 325,
+      "children": [
+        {
+          "children": [],
+          "name": "Syria town database"
+        }
+      ]
+    },
+    {
+      "name": "Jamie McDevitt-Irwin Dataverse",
+      "date": "2018-11-21 15:55:12.104",
+      "diff": 324,
+      "children": [
+        {
+          "children": [],
+          "name": "Data for McDevitt-Irwin et al. Variable interaction outcomes of local disturbance and El Nin\u0303o-induced heat stress on coral microbiome alpha and beta diversity"
+        }
+      ]
+    },
+    {
+      "name": "Blood Cancer Dataverse",
+      "date": "2018-11-21 09:05:29.452",
+      "diff": 324,
+      "children": [
+        {
+          "children": [],
+          "name": "MiMM_SBILab Dataset: Microscopic Images of Multiple Myeloma"
+        }
+      ]
+    },
+    {
+      "name": "Political Party Database  Dataverse",
+      "date": "2018-11-21 07:40:40.894",
+      "diff": 324,
+      "children": [
+        {
+          "children": [],
+          "name": "Political Party Database Round 1b.1"
+        }
+      ]
+    },
+    {
+      "name": "Integrated Crisis Early Warning System (ICEWS) Dataverse",
+      "date": "2018-11-19 15:31:32.234",
+      "diff": 322,
+      "children": [
+        {
+          "children": [],
+          "name": "ICEWS Coded Event Data"
+        }
+      ]
+    },
+    {
+      "name": "UCEPS Dataverse",
+      "date": "2018-11-17 14:40:33.652",
+      "diff": 320,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data and Online Appendix for Hale, Shevel, and Onuch, \"Believing Facts in the Fog of War: Identity, Media, and Hot Cognition in Ukraine\u2019s 2014 Odesa Tragedy,\" Geopolitics, 2018"
+        },
+        {
+          "children": [],
+          "name": "Replication Data and Online Appendix for Olga Onuch and Henry E. Hale, \"Capturing Ethnicity: The Case of Ukraine,\" Post-Soviet Affairs, 2018"
+        }
+      ]
+    },
+    {
+      "name": "Jennifer Bellotti Dataverse",
+      "date": "2018-11-14 13:26:37.057",
+      "diff": 317,
+      "children": [
+        {
+          "children": [],
+          "name": "Bullying MS Data"
+        }
+      ]
+    },
+    {
+      "name": "Matthew C. Ingram",
+      "date": "2018-11-09 21:59:55.175",
+      "diff": 312,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: Mandates, Geography, and Networks: Diffusion of Criminal Procedure Reform in Mexico"
+        },
+        {
+          "children": [],
+          "name": "Replication Data for: Geo-Nested Analysis: Mixed-Methods Research with Spatially Dependent Data"
+        }
+      ]
+    },
+    {
+      "name": "BMPER_EMT DATAVERSE",
+      "date": "2018-11-12 08:45:41.549",
+      "diff": 315,
+      "children": [
+        {
+          "children": [],
+          "name": "Original images for Figures"
+        },
+        {
+          "children": [],
+          "name": "Figure 1 raw data E9.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 1 raw data- E10.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 1 raw data- E11.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 2 raw data- E9.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 2 raw data- E10.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 2 raw data- E11.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 3 raw data- E9.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 3 raw data- E10.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 3 raw data- E11.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 4 raw data-1"
+        },
+        {
+          "children": [],
+          "name": "Figure 4 raw data- E9.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 4 raw data- E10.5"
+        },
+        {
+          "children": [],
+          "name": "Figure 4 raw data- E11.5"
+        }
+      ]
+    },
+    {
+      "name": "Crowdsourcing local data",
+      "date": "2018-11-12 10:49:06.418",
+      "diff": 315,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for \"Crowdsourcing reliable local data\""
+        }
+      ]
+    },
+    {
+      "name": "Ryan B McMahon Dataverse",
+      "date": "2018-11-10 14:04:22.019",
+      "diff": 313,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: \"Part(y) of Speech: Partisan divides in stylistic framing\""
+        }
+      ]
+    },
+    {
+      "name": "Marco Reidelbach Dataverse",
+      "date": "2018-11-10 10:45:21.55",
+      "diff": 313,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: Prediction of perturbed proton transfer networks"
+        }
+      ]
+    },
+    {
+      "name": "Gary Reinbold Dataverse",
+      "date": "2018-11-09 16:38:31.545",
+      "diff": 312,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: Effects of the Convention on the Rights of the Child on Child Mortality and Vaccination Rates: A Synthetic Control Analysis"
+        }
+      ]
+    },
+    {
+      "name": "Sensory Restoration Dataverse",
+      "date": "2018-11-09 13:27:31.141",
+      "diff": 312,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: Artificial tactile and proprioceptive feedback improves performance and confidence on object identification tasks"
+        }
+      ]
+    },
+    {
+      "name": "Harvard Business School Dataverse",
+      "date": "2018-11-06 12:30:38.222",
+      "diff": 309,
+      "children": [
+        {
+          "children": [],
+          "name": "Diary Study Database"
+        }
+      ]
+    },
+    {
+      "name": "Investigation of  Budget Changes' Effects on Program Implementation of the SBIR/STTR Program ",
+      "date": "2018-11-05 17:59:35.607",
+      "diff": 308,
+      "children": [
+        {
+          "children": [],
+          "name": "SBIR - STTR Data and Code for Collecting Wrangling and Using It"
+        }
+      ]
+    },
+    {
+      "name": "narwhal beam data Dataverse",
+      "date": "2018-11-05 17:10:06.016",
+      "diff": 308,
+      "children": [
+        {
+          "children": [],
+          "name": "narwhal beam dataset"
+        }
+      ]
+    },
+    {
+      "name": "Alexander Coppock Dataverse",
+      "date": "2018-11-03 16:49:04.524",
+      "diff": 306,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: Do Bilinguals Respond More Favorably to Candidate Advertisements in English or in Spanish?"
+        },
+        {
+          "children": [],
+          "name": "Replication Data for: Generalizability of Heterogeneous Treatment Effect Estimates Across Samples"
+        }
+      ]
+    },
+    {
+      "name": "MORDOR Infant Adverse Event Survey Data",
+      "date": "2018-11-01 17:59:03.372",
+      "diff": 304,
+      "children": [
+        {
+          "children": [],
+          "name": "Replication Data for: MORDOR Infant Adverse Event Survey Data"
+        }
+      ]
+    }
+  ]
+}
