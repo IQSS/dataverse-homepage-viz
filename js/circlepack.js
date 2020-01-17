@@ -41,7 +41,7 @@ function getRandomInt(min, max) {
    vis.color = d3
      .scaleLinear()
      .domain([-1, 5])
-     .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+     .range(["hsl(38,76%,80%)", "hsl(38,76%,33%)"])
      .interpolate(d3.interpolateHcl);
 
   // Legend
