@@ -94,8 +94,9 @@ Circlepack.prototype.wrangleData = function(){
       return 10;
     })
     .sort(function(a, b) {
-        b_diff = b.data.diff //|| 400 //TODO: handle zero value case?
-        a_diff = a.data.diff //|| 400 //TODO: if *.data.diff is undefined push it to the edge? if it's 0 push it to center
+        //TODO: handle *.data.diff is undefined
+        b_diff = b.data.diff
+        a_diff = a.data.diff
         return a_diff - b_diff;
         //"The specified function is passed two nodes a and b to compare.
         // If a should be before b, the function must return a value less than zero;
@@ -134,7 +135,6 @@ Circlepack.prototype.updateVis = function(){
     })
     .attr("class", function(d) {
       // "?" is the ternary operator
-      // TODO: revise this
       return d.parent
         ? d.children
           ? "node"
@@ -204,10 +204,10 @@ function isRootNode(node) {
 }
 
 /*
- * @param node -- circlepack hierarchy node
- * @return boolean -- true if node is the root node
+ * @param d -- circlepack hierarchy node
+ * @return String -- returns a String containing text to be displayed in the tooltip
  */
-Circlepack.prototype.formatTooltip = function(node) {
+Circlepack.prototype.formatTooltip = function(d) {
   var title_html = ''
   var children_html = ''
   //temporary for debugging:
