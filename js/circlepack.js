@@ -7,6 +7,7 @@ Circlepack = function(_parentElement, _data){
 	this.parentElement = _parentElement;
 	this.data = _data;
 	this.initVis();
+	this.nodeSelected = false;
 }
 
 function getRandomInt(min, max) {
@@ -145,11 +146,24 @@ Circlepack.prototype.updateVis = function(){
       return d.children ? vis.color(d.depth) : null;
     })
     .on("mouseover", function(d) {
-      vis.tip.show(d)
+      if (!vis.nodeSelected) vis.tip.hide(d).show(d)
     })
     .on("mouseout", function(d) {
-      vis.tip.hide(d)
-    });
+      if (!vis.nodeSelected) vis.tip.hide(d)
+    })
+    .on("click", function(d) {
+      if (vis.nodeSelected) {
+        //unclick node
+        vis.nodeSelected = false
+        vis.tip.hide(d)
+      } else {
+        //click node
+        vis.nodeSelected = true
+        vis.tip.hide(d).show(d)
+        d3.select(this)
+          .style("stroke-width", '1.5px')
+      }
+    })
 
     // Remove old data
     // Update axes
@@ -204,10 +218,10 @@ function isRootNode(node) {
 }
 
 /*
- * @param node -- circlepack hierarchy node
- * @return boolean -- true if node is the root node
+ * @param d -- circlepack hierarchy node
+ * @return String -- string containing html text that will be displayed on the tooltip
  */
-Circlepack.prototype.formatTooltip = function(node) {
+Circlepack.prototype.formatTooltip = function(d) {
   var title_html = ''
   var children_html = ''
   //temporary for debugging:
@@ -225,18 +239,23 @@ Circlepack.prototype.formatTooltip = function(node) {
   } else if (isDataverse(d)) {
     title_html = `<div class="tooltip-dataverse tooltip-title">${d.data.name}</div>`
     var style_tag = ''
-    var child_name = d.data.children[0].name
     children_html = children_html.concat(`<ul>`)
 
-    d.children.forEach(child => {
-      if (isDataset(child)) {
-        style_tag = "tooltip-dataset"
-      } else if (isDataverse(child)) {
-        style_tag = "tooltip-dataverse"
-      }
-      children_html = children_html.concat(`<li class="${style_tag} tooltip-desc">${child.data.name}</li>`)
-    })
+    // console.log(d.children)
+    if (d.children.length > 5) {
+      children_html = children_html.concat(`<li class="${style_tag} tooltip-desc"><a href="https://www.google.com" target="_blank">All datasets</a></li>`)
+    } else {
+      d.children.forEach(child => {
+        if (isDataset(child)) {
+          style_tag = "tooltip-dataset"
+        } else if (isDataverse(child)) {
+          style_tag = "tooltip-dataverse"
+        }
+        children_html = children_html.concat(`<li class="${style_tag} tooltip-desc">${child.data.name}</li>`)
+      })
+    }
     children_html = children_html.concat(`</ul>`)
+
   } else {
     // Found root node. Do nothing
     // console.log('new found node node--root')
