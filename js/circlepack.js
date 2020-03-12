@@ -23,8 +23,8 @@ function getRandomInt(min, max) {
    var vis = this;
    console.log("initVis");
    vis.margin = { top: 0, right: 0, bottom: 0, left: 0 };
-   vis.width = 1050 - vis.margin.left - vis.margin.right;
-   vis.height = 300 - vis.margin.left - vis.margin.right;
+   vis.width =2100 - vis.margin.left - vis.margin.right;
+   vis.height = 600 - vis.margin.left - vis.margin.right;
    vis.diameter = vis.width;
 
    vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -46,10 +46,16 @@ function getRandomInt(min, max) {
 
   // Legend
 
-  // Tooltip
-  vis.tooltip = d3.select("#" + vis.parentElement).append("div")
-    .attr("class", "tooltip-details")
-    .text("a simple tooltip");
+   // Tooltip
+   // References: https://github.com/caged/d3-tip/blob/master/examples/arrow-styles.html
+  vis.tip = d3.tip()
+    .attr("class", "tooltip")
+    .offset([0,10])
+    .direction('e')
+    .html(function(d) {
+      return vis.formatTooltip(d)
+    });
+    vis.svg.call(vis.tip);
 
    vis.wrangleData();
  }
@@ -81,27 +87,21 @@ Circlepack.prototype.wrangleData = function(){
   // }
   // levels(vis.data, 0);
 
-  // Reorganize data
   vis.root = d3
     .hierarchy(vis.data)
-    //.sum(function(d) { return d.size; })
-    //
     .sum(function(d) {
-      //console.log("d: " + d.name);
       //return d.size;
       return 10;
     })
     .sort(function(a, b) {
-      //console.log("b: " + b.value + " a:" + a.value);
-      // changes the orientation
-      //return b.value - a.value;
-      //"The specified function is passed two nodes a and b to compare.
-      // If a should be before b, the function must return a value less than zero;
-      // if b should be before a, the function must return a value greater than zero;"
-      // -- https://github.com/d3/d3-hierarchy#node_sort
-      random = getRandomInt(-1, 1);
-      //console.log(random);
-      return random;
+        //TODO: handle *.data.diff is undefined
+        b_diff = b.data.diff
+        a_diff = a.data.diff
+        return a_diff - b_diff;
+        //"The specified function is passed two nodes a and b to compare.
+        // If a should be before b, the function must return a value less than zero;
+        // if b should be before a, the function must return a value greater than zero;"
+        // -- https://github.com/d3/d3-hierarchy#node_sort
     });
 
     // Config pack function
@@ -119,13 +119,11 @@ Circlepack.prototype.wrangleData = function(){
  *  The drawing function
  */
 Circlepack.prototype.updateVis = function(){
-  console.log("updateVis");
   var vis = this;
-  console.log(vis);
 
   vis.circles = vis.svg.selectAll("circle")
     .data(vis.nodes);
-  console.log(vis.circles);
+
   vis.circles.enter()
     .append("circle")
     .attr("r", d => d.r)
@@ -147,25 +145,102 @@ Circlepack.prototype.updateVis = function(){
       return d.children ? vis.color(d.depth) : null;
     })
     .on("mouseover", function(d) {
-      vis.tooltip.html(`<div id="tooltip-text">${d.data.name}</div>`);
-      vis.tooltip.transition()
-        .duration(300)
-        .style("opacity", 1)
-        // .style("top", `${d.x - d.r - vis.height}px`)
-        // .style("left", `${d.y - d.r}px`)
-    })
-    .on("mousemove", function(d) {
-      vis.tooltip
-        .style("top", d3.event.pageY - 10 + "px")
-        .style("left", d3.event.pageX + 10 + "px");
+      vis.tip.show(d)
     })
     .on("mouseout", function(d) {
-      vis.tooltip.transition()
-        .duration(500)
-        .style("opacity", 0);
+      vis.tip.hide(d)
     });
 
     // Remove old data
     // Update axes
 
 }
+
+
+//////////////////////////////////////////
+/*            HELPER METHODS            */
+//////////////////////////////////////////
+
+// Parse a string with the format "2018-11-12 08:45:41.549" into a Javascript Date object
+var parseDateTime = d3.timeParse("%Y-%m-%d %H:%M:%S.%L");
+
+// Format date objects like: Jan 30, 2020
+var formatDate = d3.timeFormat("%b %e, %Y");
+
+// Set the transition duration
+// Usage: d3.select("circle").transition(t)
+var t = d3.transition()
+  .duration(500)
+
+/*
+ * @param node -- circlepack hierarchy node
+ * @return boolean -- true if node is a dataset
+ */
+function isDataset(node) {
+  // if node does not have a parent, it must be the root node
+  if(!node.parent) return false
+  // if node has no children, it is a dataset
+  return !node.children
+}
+
+/*
+ * @param node -- circlepack hierarchy node
+ * @return boolean -- true if node is a dataverse
+ */
+function isDataverse(node) {
+  // if node does not have a parent, it must be the root node
+  if(!node.parent) return false
+  // if node has children, it is a dataverse
+  return node.children
+}
+
+/*
+ * @param node -- circlepack hierarchy node
+ * @return boolean -- true if node is the root node
+ */
+function isRootNode(node) {
+  // if node does not have a parent, it must be the root node
+  return !node.parent
+}
+
+/*
+ * @param d -- circlepack hierarchy node
+ * @return String -- returns a String containing text to be displayed in the tooltip
+ */
+Circlepack.prototype.formatTooltip = function(d) {
+  var title_html = ''
+  var children_html = ''
+  //temporary for debugging:
+  var diff = `<div class="tooltip-diff">${d.data.diff}</div>`
+
+  // if date is present parse string as a Date and format it
+  var date_label = d.data.date ? formatDate(parseDateTime(d.data.date)) : 'Date unknown'
+  var date_html = `<div class="tooltip-date">${date_label}</div>`
+
+  // if current node you're hovering over is a dataset, construct dataset title only
+  // else if it's a dataverse, construct a dataverse title and add children to the description section
+  if (isDataset(d)) {
+    title_html = `<div class="tooltip-dataset tooltip-title">${d.data.name}</div>`
+
+  } else if (isDataverse(d)) {
+    title_html = `<div class="tooltip-dataverse tooltip-title">${d.data.name}</div>`
+    var style_tag = ''
+    var child_name = d.data.children[0].name
+    children_html = children_html.concat(`<ul>`)
+
+    d.children.forEach(child => {
+      if (isDataset(child)) {
+        style_tag = "tooltip-dataset"
+      } else if (isDataverse(child)) {
+        style_tag = "tooltip-dataverse"
+      }
+      children_html = children_html.concat(`<li class="${style_tag} tooltip-desc">${child.data.name}</li>`)
+    })
+    children_html = children_html.concat(`</ul>`)
+  } else {
+    // Found root node. Do nothing
+    // console.log('new found node node--root')
+  }
+  return '<div class="tooltip-details">' + title_html + date_html + children_html + diff + '</div">'
+}
+
