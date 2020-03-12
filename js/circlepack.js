@@ -7,7 +7,7 @@ Circlepack = function(_parentElement, _data){
 	this.parentElement = _parentElement;
 	this.data = _data;
 	this.initVis();
-	this.nodeSelected = false;
+	this.nodeSelected; // the current node that is selected
 }
 
 function getRandomInt(min, max) {
@@ -24,7 +24,7 @@ function getRandomInt(min, max) {
    var vis = this;
    console.log("initVis");
    vis.margin = { top: 0, right: 0, bottom: 0, left: 0 };
-   vis.width =2100 - vis.margin.left - vis.margin.right;
+   vis.width = 2100 - vis.margin.left - vis.margin.right;
    vis.height = 600 - vis.margin.left - vis.margin.right;
    vis.diameter = vis.width;
 
@@ -34,7 +34,7 @@ function getRandomInt(min, max) {
 	    .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
         .append("g")
         // .attr("transform", "translate(" + vis.width / 2 + "," + vis.height / 2 + ")");
-	       .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
+	       .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
 
    // Scales and axes
 
@@ -95,8 +95,9 @@ Circlepack.prototype.wrangleData = function(){
       return 10;
     })
     .sort(function(a, b) {
-        b_diff = b.data.diff //|| 400 //TODO: handle zero value case?
-        a_diff = a.data.diff //|| 400 //TODO: if *.data.diff is undefined push it to the edge? if it's 0 push it to center
+        //TODO: handle *.data.diff is undefined
+        b_diff = b.data.diff
+        a_diff = a.data.diff
         return a_diff - b_diff;
         //"The specified function is passed two nodes a and b to compare.
         // If a should be before b, the function must return a value less than zero;
@@ -128,14 +129,13 @@ Circlepack.prototype.updateVis = function(){
     .append("circle")
     .attr("r", d => d.r)
     .attr("transform", function(d){
-        return "translate(" + d.x + "," + d.y + ")";
+        return `translate(${d.x}, ${d.y})`;
       // let x = getRandomInt(0,vis.width);
       // let y = getRandomInt(0, vis.height);
       // return "translate(" + x + "," + y + ")";
     })
     .attr("class", function(d) {
       // "?" is the ternary operator
-      // TODO: revise this
       return d.parent
         ? d.children
           ? "node"
@@ -146,22 +146,48 @@ Circlepack.prototype.updateVis = function(){
       return d.children ? vis.color(d.depth) : null;
     })
     .on("mouseover", function(d) {
+      // only show tooltip if nothing is selected
       if (!vis.nodeSelected) vis.tip.hide(d).show(d)
+      // always show outline
+      d3.select(this)
+        .attr("stroke-width", "1.5px")
+        .attr("stroke", "#000")
     })
     .on("mouseout", function(d) {
-      if (!vis.nodeSelected) vis.tip.hide(d)
+      if (vis.nodeSelected !== this) {
+        // set stroke to none on mouseout if not mousing over a selected node and nothing is selected
+        d3.select(this)
+          .attr("stroke", "none")
+        // only hide tooltip if no node is selected
+        if (!vis.nodeSelected) vis.tip.hide(d);
+      }
     })
     .on("click", function(d) {
-      if (vis.nodeSelected) {
-        //unclick node
-        vis.nodeSelected = false
-        vis.tip.hide(d)
-      } else {
-        //click node
-        vis.nodeSelected = true
-        vis.tip.hide(d).show(d)
+      if (!vis.nodeSelected) {
+        // if clicking a node and nothing is selected, select it and show tooltip
+        vis.nodeSelected = this;
+        vis.tip.hide(d).show(d);
         d3.select(this)
-          .style("stroke-width", '1.5px')
+          .attr("stroke-width", '1.5px')
+          .attr("stroke", "#000")
+
+      } else if (vis.nodeSelected === this) {
+        // if clicking a node that is already selected, unselect it and hide tooltip
+        vis.nodeSelected = undefined;
+        vis.tip.hide(d);
+        d3.select(this)
+          .attr("stroke", 'none')
+
+      } else if (vis.nodeSelected && vis.nodeSelected !== this) {
+        // if clicking a node and a different node is already selected, unselect it and select this one
+        var previous = vis.nodeSelected
+        vis.nodeSelected = this;
+        vis.tip.hide(d).show(d);
+        d3.select(previous)
+          .attr("stroke", 'none')
+        d3.select(this)
+          .attr("stroke-width", '1.5px')
+          .attr("stroke", "#000")
       }
     })
 
@@ -224,41 +250,42 @@ function isRootNode(node) {
 Circlepack.prototype.formatTooltip = function(d) {
   var title_html = ''
   var children_html = ''
-  //temporary for debugging:
+  var style_tag = ''
+
+  /*temporary for debugging:*/
   var diff = `<div class="tooltip-diff">${d.data.diff}</div>`
 
   // if date is present parse string as a Date and format it
   var date_label = d.data.date ? formatDate(parseDateTime(d.data.date)) : 'Date unknown'
   var date_html = `<div class="tooltip-date">${date_label}</div>`
+  var title_link = d.data.link
 
   // if current node you're hovering over is a dataset, construct dataset title only
-  // else if it's a dataverse, construct a dataverse title and add children to the description section
   if (isDataset(d)) {
-    title_html = `<div class="tooltip-dataset tooltip-title">${d.data.name}</div>`
+    title_html = `<div class="tooltip-dataset tooltip-title"><a href="${title_link}" target="_blank">${d.data.name}</a></div>`
 
+  // else if it's a dataverse, construct a dataverse title and add children to the description section
   } else if (isDataverse(d)) {
-    title_html = `<div class="tooltip-dataverse tooltip-title">${d.data.name}</div>`
-    var style_tag = ''
+    title_html = `<div class="tooltip-dataverse tooltip-title"><a href="${title_link}" target="_blank">${d.data.name}</a></div>`
     children_html = children_html.concat(`<ul>`)
 
-    // console.log(d.children)
+    // if dataverse has more than 5 children show link to all datasets
     if (d.children.length > 5) {
-      children_html = children_html.concat(`<li class="${style_tag} tooltip-desc"><a href="https://www.google.com" target="_blank">All datasets</a></li>`)
+      style_tag = "tooltip-dataset"
+      children_html = children_html.concat(`<li class="${style_tag} tooltip-desc"><a href="${title_link}" target="_blank">All datasets</a></li>`)
+
     } else {
+      // else show all children
       d.children.forEach(child => {
         if (isDataset(child)) {
           style_tag = "tooltip-dataset"
         } else if (isDataverse(child)) {
           style_tag = "tooltip-dataverse"
         }
-        children_html = children_html.concat(`<li class="${style_tag} tooltip-desc">${child.data.name}</li>`)
+        children_html = children_html.concat(`<li class="${style_tag} tooltip-desc"><a href="${child.data.link}" target="_blank">${child.data.name}</a></li>`)
       })
     }
     children_html = children_html.concat(`</ul>`)
-
-  } else {
-    // Found root node. Do nothing
-    // console.log('new found node node--root')
   }
   return '<div class="tooltip-details">' + title_html + date_html + children_html + diff + '</div">'
 }

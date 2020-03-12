@@ -467,36 +467,44 @@
       "name": "MEDSL Dataverse",
       "date": "2018-09-10 11:22:44.492",
       "diff": 252,
+      "link": "https://dataverse.harvard.edu/dataverse/medsl",
       "children": [
         {
           "children": [
             {
               "children": [
                 {
-                  "name": "State Office-Level Returns 2016"
+                  "name": "State Office-Level Returns 2016",
+                  "link": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/XSOFHD"
                 }
               ],
-              "name": "State Elections"
+              "name": "State Elections",
+              "link": "https://dataverse.harvard.edu/dataverse/medsl_state"
             }
           ],
-          "name": "MEDSL Election Returns Dataverse"
+          "name": "MEDSL Election Returns Dataverse",
+          "link": "https://dataverse.harvard.edu/dataverse/medsl_election_returns"
         },
         {
           "children": [
             {
               "children": [],
-              "name": "EPI Full Reproduction Files"
+              "name": "EPI Full Reproduction Files",
+              "link": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/4AEEQV"
             },
             {
               "children": [],
-              "name": "Elections Performance Index Indicators 2008\u20132016"
+              "name": "Elections Performance Index Indicators 2008\u20132016",
+              "link": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SKCC60"
             },
             {
               "children": [],
-              "name": "Elections Performance Index 2016"
+              "name": "Elections Performance Index 2016",
+              "link": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/MQMMHZ"
             }
           ],
-          "name": "Elections Performance Index Dataverse"
+          "name": "Elections Performance Index Dataverse",
+          "link": "https://dataverse.harvard.edu/dataverse/epi"
         }
       ]
     },
@@ -735,6 +743,7 @@
       "name": "BMPER_EMT DATAVERSE",
       "date": "2018-11-12 08:45:41.549",
       "diff": 315,
+      "link": "https://dataverse.harvard.edu/dataverse/BMPER_EMT",
       "children": [
         {
           "children": [],
