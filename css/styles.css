@@ -2,11 +2,6 @@
   cursor: pointer;
 }
 
-.node:hover {
-  stroke: #000;
-  stroke-width: 1.5px;
-}
-
 .node--leaf {
   fill: white;
 }
@@ -31,6 +26,11 @@
 }
 
 /*    TOOLTIP STYLES    */
+.tooltip a {
+  color: unset;
+  text-decoration: unset;
+}
+
 .tooltip-title {
   display: block;
   margin-bottom: 5px;
