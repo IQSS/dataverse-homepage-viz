@@ -30,6 +30,7 @@ function getRandomInt(min, max) {
 
    vis.svg = d3.select("#" + vis.parentElement).append("svg")
       .attr("class", "vis-svg")
+      .attr("id", "vis-svg-id")
 	    .attr("width", vis.width + vis.margin.left + vis.margin.right)
 	    .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
         .append("g")
@@ -122,6 +123,17 @@ Circlepack.prototype.wrangleData = function(){
 Circlepack.prototype.updateVis = function(){
   var vis = this;
 
+  // global click handler
+  d3.select("body")
+    .on("click", function(){
+      // reset any tooltips if target we clicked on is not a circle
+      // this check is not strictly necessary since we call d3.event.stopPropagation() in the circle click handler below
+      // however, I'm including it here in case we want to allow circle clicks to propagate to the svg body in the future
+      if (d3.event.target.nodeName !== 'circle') {
+          vis.resetTooltip()
+      }
+    });
+
   vis.circles = vis.svg.selectAll("circle")
     .data(vis.nodes);
 
@@ -146,9 +158,9 @@ Circlepack.prototype.updateVis = function(){
       return d.children ? vis.color(d.depth) : null;
     })
     .on("mouseover", function(d) {
-      // only show tooltip if nothing is selected
+      // only show tooltip on hover if none are selected
       if (!vis.nodeSelected) vis.tip.hide(d).show(d)
-      // always show outline
+      // always show outline on hover
       d3.select(this)
         .attr("stroke-width", "1.5px")
         .attr("stroke", "#000")
@@ -173,22 +185,21 @@ Circlepack.prototype.updateVis = function(){
 
       } else if (vis.nodeSelected === this) {
         // if clicking a node that is already selected, unselect it and hide tooltip
-        vis.nodeSelected = undefined;
-        vis.tip.hide(d);
-        d3.select(this)
-          .attr("stroke", 'none')
+        vis.resetTooltip()
 
       } else if (vis.nodeSelected && vis.nodeSelected !== this) {
         // if clicking a node and a different node is already selected, unselect it and select this one
         var previous = vis.nodeSelected
-        vis.nodeSelected = this;
-        vis.tip.hide(d).show(d);
         d3.select(previous)
           .attr("stroke", 'none')
+        vis.tip.hide(d).show(d);
+        vis.nodeSelected = this;
         d3.select(this)
           .attr("stroke-width", '1.5px')
           .attr("stroke", "#000")
       }
+      // blocks circle clicks from propagating to the global click event handler above
+      d3.event.stopPropagation()
     })
 
     // Remove old data
@@ -241,6 +252,14 @@ function isDataverse(node) {
 function isRootNode(node) {
   // if node does not have a parent, it must be the root node
   return !node.parent
+}
+
+Circlepack.prototype.resetTooltip = function(d) {
+  var vis = this
+  d3.select(vis.nodeSelected)
+    .attr("stroke", 'none')
+  vis.nodeSelected = undefined;
+  vis.tip.hide();
 }
 
 /*
