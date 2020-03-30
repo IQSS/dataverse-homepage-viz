@@ -6,8 +6,10 @@
 Circlepack = function(_parentElement, _data){
 	this.parentElement = _parentElement;
 	this.data = _data;
-	this.initVis();
 	this.nodeSelected; // the current node that is selected
+  // this.direction = 'e';
+
+  this.initVis();
 }
 
 function getRandomInt(min, max) {
@@ -24,18 +26,21 @@ function getRandomInt(min, max) {
    var vis = this;
    console.log("initVis");
    vis.margin = { top: 0, right: 0, bottom: 0, left: 0 };
-   vis.width = 2100 - vis.margin.left - vis.margin.right;
-   vis.height = 600 - vis.margin.left - vis.margin.right;
+
+   var totalWidth = document.getElementById(vis.parentElement).offsetWidth
+   vis.width = totalWidth - vis.margin.left - vis.margin.right;
+   vis.height = 450 - vis.margin.left - vis.margin.right;
    vis.diameter = vis.width;
 
    vis.svg = d3.select("#" + vis.parentElement).append("svg")
       .attr("class", "vis-svg")
       .attr("id", "vis-svg-id")
-	    .attr("width", vis.width + vis.margin.left + vis.margin.right)
-	    .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
-        .append("g")
-        // .attr("transform", "translate(" + vis.width / 2 + "," + vis.height / 2 + ")");
-	       .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
+      // .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", `0 0 ${vis.width} ${vis.height}`)
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .append("g")
+	    .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
 
    // Scales and axes
 
@@ -52,8 +57,7 @@ function getRandomInt(min, max) {
    // References: https://github.com/caged/d3-tip/blob/master/examples/arrow-styles.html
   vis.tip = d3.tip()
     .attr("class", "tooltip")
-    .offset([0,10])
-    .direction('e')
+    .offset([-5,12]).direction('e')
     .html(function(d) {
       return vis.formatTooltip(d)
     });
@@ -96,22 +100,21 @@ Circlepack.prototype.wrangleData = function(){
       return 10;
     })
     .sort(function(a, b) {
-        //TODO: handle *.data.diff is undefined
-        b_diff = b.data.diff
-        a_diff = a.data.diff
-        return a_diff - b_diff;
-        //"The specified function is passed two nodes a and b to compare.
-        // If a should be before b, the function must return a value less than zero;
-        // if b should be before a, the function must return a value greater than zero;"
-        // -- https://github.com/d3/d3-hierarchy#node_sort
+      b_diff = b.data.diff === undefined ? 0 : b.data.diff
+      a_diff = a.data.diff === undefined ? 0 : a.data.diff
+      return a_diff - b_diff;
+      //"The specified function is passed two nodes a and b to compare.
+      // If a should be before b, the function must return a value less than zero;
+      // if b should be before a, the function must return a value greater than zero;"
+      // -- https://github.com/d3/d3-hierarchy#node_sort
     });
 
     // Config pack function
-    vis.pack = d3
-      .pack()
+    vis.pack = d3.pack()
       .size([vis.width, vis.height])
       // For nested circles, the distance between the circle itself and circles inside it.
       .padding(4);
+    // Invoke pack function
     vis.nodes = vis.pack(vis.root).descendants();
 
   vis.updateVis();
