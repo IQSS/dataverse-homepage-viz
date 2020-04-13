@@ -6,8 +6,10 @@
 Circlepack = function(_parentElement, _data){
 	this.parentElement = _parentElement;
 	this.data = _data;
-	this.initVis();
 	this.nodeSelected; // the current node that is selected
+  // this.direction = 'e';
+
+  this.initVis();
 }
 
 function getRandomInt(min, max) {
@@ -24,17 +26,21 @@ function getRandomInt(min, max) {
    var vis = this;
    console.log("initVis");
    vis.margin = { top: 0, right: 0, bottom: 0, left: 0 };
-   vis.width = 2100 - vis.margin.left - vis.margin.right;
-   vis.height = 600 - vis.margin.left - vis.margin.right;
+
+   var totalWidth = document.getElementById(vis.parentElement).offsetWidth
+   vis.width = totalWidth - vis.margin.left - vis.margin.right;
+   vis.height = 450 - vis.margin.left - vis.margin.right;
    vis.diameter = vis.width;
 
    vis.svg = d3.select("#" + vis.parentElement).append("svg")
       .attr("class", "vis-svg")
-	    .attr("width", vis.width + vis.margin.left + vis.margin.right)
-	    .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
-        .append("g")
-        // .attr("transform", "translate(" + vis.width / 2 + "," + vis.height / 2 + ")");
-	       .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
+      .attr("id", "vis-svg-id")
+      // .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", `0 0 ${vis.width} ${vis.height}`)
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .append("g")
+	    .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
 
    // Scales and axes
 
@@ -51,8 +57,7 @@ function getRandomInt(min, max) {
    // References: https://github.com/caged/d3-tip/blob/master/examples/arrow-styles.html
   vis.tip = d3.tip()
     .attr("class", "tooltip")
-    .offset([0,10])
-    .direction('e')
+    .offset([-5,12]).direction('e')
     .html(function(d) {
       return vis.formatTooltip(d)
     });
@@ -95,22 +100,21 @@ Circlepack.prototype.wrangleData = function(){
       return 10;
     })
     .sort(function(a, b) {
-        //TODO: handle *.data.diff is undefined
-        b_diff = b.data.diff
-        a_diff = a.data.diff
-        return a_diff - b_diff;
-        //"The specified function is passed two nodes a and b to compare.
-        // If a should be before b, the function must return a value less than zero;
-        // if b should be before a, the function must return a value greater than zero;"
-        // -- https://github.com/d3/d3-hierarchy#node_sort
+      b_diff = b.data.diff === undefined ? 0 : b.data.diff
+      a_diff = a.data.diff === undefined ? 0 : a.data.diff
+      return a_diff - b_diff;
+      //"The specified function is passed two nodes a and b to compare.
+      // If a should be before b, the function must return a value less than zero;
+      // if b should be before a, the function must return a value greater than zero;"
+      // -- https://github.com/d3/d3-hierarchy#node_sort
     });
 
     // Config pack function
-    vis.pack = d3
-      .pack()
+    vis.pack = d3.pack()
       .size([vis.width, vis.height])
       // For nested circles, the distance between the circle itself and circles inside it.
       .padding(4);
+    // Invoke pack function
     vis.nodes = vis.pack(vis.root).descendants();
 
   vis.updateVis();
@@ -121,6 +125,17 @@ Circlepack.prototype.wrangleData = function(){
  */
 Circlepack.prototype.updateVis = function(){
   var vis = this;
+
+  // global click handler
+  d3.select("body")
+    .on("click", function(){
+      // reset any tooltips if target we clicked on is not a circle
+      // this check is not strictly necessary since we call d3.event.stopPropagation() in the circle click handler below
+      // however, I'm including it here in case we want to allow circle clicks to propagate to the svg body in the future
+      if (d3.event.target.nodeName !== 'circle') {
+          vis.resetTooltip()
+      }
+    });
 
   vis.circles = vis.svg.selectAll("circle")
     .data(vis.nodes);
@@ -146,9 +161,9 @@ Circlepack.prototype.updateVis = function(){
       return d.children ? vis.color(d.depth) : null;
     })
     .on("mouseover", function(d) {
-      // only show tooltip if nothing is selected
+      // only show tooltip on hover if none are selected
       if (!vis.nodeSelected) vis.tip.hide(d).show(d)
-      // always show outline
+      // always show outline on hover
       d3.select(this)
         .attr("stroke-width", "1.5px")
         .attr("stroke", "#000")
@@ -173,22 +188,21 @@ Circlepack.prototype.updateVis = function(){
 
       } else if (vis.nodeSelected === this) {
         // if clicking a node that is already selected, unselect it and hide tooltip
-        vis.nodeSelected = undefined;
-        vis.tip.hide(d);
-        d3.select(this)
-          .attr("stroke", 'none')
+        vis.resetTooltip()
 
       } else if (vis.nodeSelected && vis.nodeSelected !== this) {
         // if clicking a node and a different node is already selected, unselect it and select this one
         var previous = vis.nodeSelected
-        vis.nodeSelected = this;
-        vis.tip.hide(d).show(d);
         d3.select(previous)
           .attr("stroke", 'none')
+        vis.tip.hide(d).show(d);
+        vis.nodeSelected = this;
         d3.select(this)
           .attr("stroke-width", '1.5px')
           .attr("stroke", "#000")
       }
+      // blocks circle clicks from propagating to the global click event handler above
+      d3.event.stopPropagation()
     })
 
     // Remove old data
@@ -241,6 +255,14 @@ function isDataverse(node) {
 function isRootNode(node) {
   // if node does not have a parent, it must be the root node
   return !node.parent
+}
+
+Circlepack.prototype.resetTooltip = function(d) {
+  var vis = this
+  d3.select(vis.nodeSelected)
+    .attr("stroke", 'none')
+  vis.nodeSelected = undefined;
+  vis.tip.hide();
 }
 
 /*
