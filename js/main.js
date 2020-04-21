@@ -1,5 +1,6 @@
 var allData = {};
 var circlepack;
+var slider;
 
 async function loadData(){
 
@@ -17,8 +18,14 @@ async function loadData(){
 }
 
 function createVis(){
-  console.log("createVis");
+  // console.log("createVis");
   circlepack = new Circlepack("circlepack", allData);
+  slider = new VisSlider("slider", allData);
+}
+
+function sliderChanged(value) {
+  console.log("called sliderChanged: " + value)
+  circlepack.wrangleData(value)
 }
 
 // Start vis application

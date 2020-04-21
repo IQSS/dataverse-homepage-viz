@@ -6,8 +6,8 @@
 Circlepack = function(_parentElement, _data){
 	this.parentElement = _parentElement;
 	this.data = _data;
-	this.nodeSelected; // the current node that is selected
-  // this.direction = 'e';
+	this.displayData = {};
+	this.nodeSelected; // the current circle node that is selected
 
   this.initVis();
 }
@@ -21,13 +21,13 @@ function getRandomInt(min, max) {
 /*
  * Initialize visualization (static content; e.g. SVG area, axes)
  */
- Circlepack.prototype.initVis = function(){
+Circlepack.prototype.initVis = function(){
    // Padding and margins
    var vis = this;
-   console.log("initVis");
    vis.margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
    var totalWidth = document.getElementById(vis.parentElement).offsetWidth
+  // console.log("totalWidth: " + totalWidth)
    vis.width = totalWidth - vis.margin.left - vis.margin.right;
    vis.height = 450 - vis.margin.left - vis.margin.right;
    vis.diameter = vis.width;
@@ -40,7 +40,7 @@ function getRandomInt(min, max) {
       .attr("width", "100%")
       .attr("height", "100%")
       .append("g")
-	    .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
+	    // .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
 
    // Scales and axes
 
@@ -53,27 +53,40 @@ function getRandomInt(min, max) {
 
   // Legend
 
-   // Tooltip
-   // References: https://github.com/caged/d3-tip/blob/master/examples/arrow-styles.html
+  // Tooltip
+  // References: https://github.com/caged/d3-tip/blob/master/examples/arrow-styles.html
   vis.tip = d3.tip()
     .attr("class", "tooltip")
-    .offset([-5,12]).direction('e')
+    .attr("id", "tooltip-id")
+    .offset([-5,12])
+    .direction('e')
     .html(function(d) {
       return vis.formatTooltip(d)
-    });
+    })
     vis.svg.call(vis.tip);
 
    vis.wrangleData();
- }
+}
 
  /*
  *  Data wrangling
  */
-Circlepack.prototype.wrangleData = function(){
+Circlepack.prototype.wrangleData = function(sliderMax = null){
   var vis = this;
-  console.log("wrangleData");
+  console.log("================ wrangleData =================");
+
+  // first make another copy of vis.data using spread operator
+  vis.displayData = { ...vis.data };
+  // console.log("--- vis.displayData.children.length ---" + vis.displayData.children.length)
 
   //Filter data
+  // first filter for only the data we need to display based on slider value,
+  // then feed it through further transformations
+  var filteredChildren = vis.displayData.children.filter(child => sliderMax ? child.diff <= sliderMax : true)
+  vis.displayData.children = filteredChildren;
+
+  // console.log("--- filteredChildren.length ---" + filteredChildren.length)
+  // console.log(filteredChildren)
 
   // Label and enhance data
   // console.log(vis.data);
@@ -94,7 +107,7 @@ Circlepack.prototype.wrangleData = function(){
   // levels(vis.data, 0);
 
   vis.root = d3
-    .hierarchy(vis.data)
+    .hierarchy(vis.displayData)
     .sum(function(d) {
       //return d.size;
       return 10;
@@ -109,14 +122,18 @@ Circlepack.prototype.wrangleData = function(){
       // -- https://github.com/d3/d3-hierarchy#node_sort
     });
 
-    // Config pack function
-    vis.pack = d3.pack()
-      .size([vis.width, vis.height])
-      // For nested circles, the distance between the circle itself and circles inside it.
-      .padding(4);
-    // Invoke pack function
-    vis.nodes = vis.pack(vis.root).descendants();
+  // console.log(vis.root)
 
+  // Config pack function
+  vis.pack = d3.pack()
+    .size([vis.width, vis.height])
+    // For nested circles, the padding between tangent circles
+    .padding(4);
+  // Invoke pack function
+  vis.nodes = vis.pack(vis.root).descendants();
+
+  // console.log("--- vis.nodes ---")
+  // console.log(vis.nodes)
   vis.updateVis();
 }
 
@@ -142,13 +159,6 @@ Circlepack.prototype.updateVis = function(){
 
   vis.circles.enter()
     .append("circle")
-    .attr("r", d => d.r)
-    .attr("transform", function(d){
-        return `translate(${d.x}, ${d.y})`;
-      // let x = getRandomInt(0,vis.width);
-      // let y = getRandomInt(0, vis.height);
-      // return "translate(" + x + "," + y + ")";
-    })
     .attr("class", function(d) {
       // "?" is the ternary operator
       return d.parent
@@ -157,12 +167,36 @@ Circlepack.prototype.updateVis = function(){
           : "node node--leaf"
         : "node node--root";
     })
+    .attr("r", d => d.r)
+    .attr("transform", function(d){
+      return `translate(${d.x}, ${d.y})`;
+    })
     .style("fill", function(d){
-      return d.children ? vis.color(d.depth) : null;
+      return d.children ? vis.color(d.depth) : 'white';
     })
     .on("mouseover", function(d) {
       // only show tooltip on hover if none are selected
-      if (!vis.nodeSelected) vis.tip.hide(d).show(d)
+      // console.log('showing what this is')
+      // console.log(this)
+
+      var circle = this;
+      var circleSelect = d3.select(this)
+      var circleX = d.x;
+
+      // console.log(`getBBox:`);
+      // console.log(circle.getBBox())
+
+      if (!vis.nodeSelected) {
+        if (showWestwardTooltip(circleX, circleSelect)) {
+          vis.tip.hide(d)
+            .direction('w').offset([-5,-12])
+            .show(d)
+        }  else {
+          vis.tip.hide(d)
+            .direction('e').offset([-5,12])
+            .show(d)
+        }
+      }
       // always show outline on hover
       d3.select(this)
         .attr("stroke-width", "1.5px")
@@ -178,6 +212,7 @@ Circlepack.prototype.updateVis = function(){
       }
     })
     .on("click", function(d) {
+      var circle = this;
       if (!vis.nodeSelected) {
         // if clicking a node and nothing is selected, select it and show tooltip
         vis.nodeSelected = this;
@@ -201,12 +236,31 @@ Circlepack.prototype.updateVis = function(){
           .attr("stroke-width", '1.5px')
           .attr("stroke", "#000")
       }
-      // blocks circle clicks from propagating to the global click event handler above
+      // blocks circle clicks from propagating to the global click event handler at the top of updateVis method
       d3.event.stopPropagation()
     })
+    .merge(vis.circles) // update vis with new data
+    // .transition(t)
+    .attr("class", function(d) {
+      // "?" is the ternary operator
+      return d.parent
+        ? d.children
+          ? "node"
+          : "node node--leaf"
+        : "node node--root";
+    })
+    .attr("r", d => d.r)
+    .attr("transform", function(d){
+      return `translate(${d.x}, ${d.y})`;
+    })
+    .style("fill", function(d){
+      return d.children ? vis.color(d.depth) : 'white';
+    })
 
-    // Remove old data
-    // Update axes
+  // Remove old data
+  vis.circles.exit().remove();
+
+  // Update axes
 
 }
 
@@ -256,6 +310,33 @@ function isRootNode(node) {
   // if node does not have a parent, it must be the root node
   return !node.parent
 }
+
+/*
+ * @param circleX -- circle x position
+ * @param circleSelection -- d3 selection of a circlepack hierarchy node; eg. var circleSelection = d3.select(this)
+ * @return boolean -- true if we want to show a westward tooltip
+ */
+function showWestwardTooltip(circleX, circleSelection) {
+  // show westward tooltip if circle x is far enough to the right of the screen
+  var TOOLTIP_BUFFER = 0;
+  var MAX_TOOLTIP_WIDTH = 350;
+  var TOOLTIP_X_LIMIT = document.documentElement.clientWidth - TOOLTIP_BUFFER - MAX_TOOLTIP_WIDTH - circleSelection.attr("r");
+  // console.log(`TOOLTIP_X_LIMIT = ${document.documentElement.clientWidth} - ${TOOLTIP_BUFFER} - ${MAX_TOOLTIP_WIDTH} - ${circleSelection.attr("r")}`)
+  // console.log(`${circleX} >= ${TOOLTIP_X_LIMIT} ?`)
+
+  // .direction(function(d) { return vis.direction })
+  // .offset(function(d){
+  //   // console.log("current direction: " + vis.direction)
+  //   // console.log(d)
+  //   if (vis.direction == 'n') { return [-12,-5] }
+  //   else if (vis.direction =='s') { return [12,-5] }
+  //   else if (vis.direction =='e') { return [-5,12] }
+  //   else if (vis.direction =='w') { return [-5,-12] }
+  // })
+
+  return circleX >= TOOLTIP_X_LIMIT;
+}
+
 
 Circlepack.prototype.resetTooltip = function(d) {
   var vis = this
