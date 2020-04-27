@@ -2,9 +2,9 @@
   cursor: pointer;
 }
 
-/*.node--leaf {*/
-/*  fill: white;*/
-/*}*/
+.node--leaf {
+  fill: white;
+}
 
 .label {
   font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -12,17 +12,11 @@
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
 
-/*.label,*/
-/*.node--root,*/
-/*.node--leaf {*/
-/*}*/
-
 .node--root {
   display: none;
 }
 
 /* VIS SIZING AND RESPONSIVENESS STYLES */
-
 .vis-svg {
   background: rgb(217, 224, 227);
 }
@@ -53,6 +47,7 @@
   -webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.2);
   max-width: 350px; /* max tooltip width. If this is changed, must change MAX_TOOLTIP_WIDTH constant in circlepack.js */
+  min-width: unset;
 }
 
 .tooltip-dataverse {

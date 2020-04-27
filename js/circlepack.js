@@ -21,13 +21,13 @@ function getRandomInt(min, max) {
 /*
  * Initialize visualization (static content; e.g. SVG area, axes)
  */
-Circlepack.prototype.initVis = function(){
+Circlepack.prototype.initVis = function() {
    // Padding and margins
    var vis = this;
    vis.margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
    var totalWidth = document.getElementById(vis.parentElement).offsetWidth
-  // console.log("totalWidth: " + totalWidth)
+  console.log("totalWidth: " + totalWidth)
    vis.width = totalWidth - vis.margin.left - vis.margin.right;
    vis.height = 450 - vis.margin.left - vis.margin.right;
    vis.diameter = vis.width;
@@ -73,20 +73,15 @@ Circlepack.prototype.initVis = function(){
  */
 Circlepack.prototype.wrangleData = function(sliderMax = null){
   var vis = this;
-  console.log("================ wrangleData =================");
 
   // first make another copy of vis.data using spread operator
   vis.displayData = { ...vis.data };
-  // console.log("--- vis.displayData.children.length ---" + vis.displayData.children.length)
 
   //Filter data
   // first filter for only the data we need to display based on slider value,
   // then feed it through further transformations
   var filteredChildren = vis.displayData.children.filter(child => sliderMax ? child.diff <= sliderMax : true)
   vis.displayData.children = filteredChildren;
-
-  // console.log("--- filteredChildren.length ---" + filteredChildren.length)
-  // console.log(filteredChildren)
 
   // Label and enhance data
   // console.log(vis.data);
@@ -121,8 +116,6 @@ Circlepack.prototype.wrangleData = function(sliderMax = null){
       // if b should be before a, the function must return a value greater than zero;"
       // -- https://github.com/d3/d3-hierarchy#node_sort
     });
-
-  // console.log(vis.root)
 
   // Config pack function
   vis.pack = d3.pack()
@@ -175,68 +168,59 @@ Circlepack.prototype.updateVis = function(){
       return d.children ? vis.color(d.depth) : 'white';
     })
     .on("mouseover", function(d) {
-      // only show tooltip on hover if none are selected
-      // console.log('showing what this is')
-      // console.log(this)
+      let circleSelect = d3.select(this)
+      let circleX = d.x;
+      let window_width = document.getElementById(vis.parentElement).offsetWidth;
+      let limit = window_width * 0.67
 
-      var circle = this;
-      var circleSelect = d3.select(this)
-      var circleX = d.x;
+// console.log(`getBBox:`);
+// console.log(circle.getBBox())
 
-      // console.log(`getBBox:`);
-      // console.log(circle.getBBox())
+//////////////////////////////////////
+      //console.log(">>> window width: " + window_width)
+      //console.log(">>> limit:" + window_width * 0.67)
 
-      if (!vis.nodeSelected) {
-        if (showWestwardTooltip(circleX, circleSelect)) {
-          vis.tip.hide(d)
-            .direction('w').offset([-5,-12])
-            .show(d)
-        }  else {
-          vis.tip.hide(d)
-            .direction('e').offset([-5,12])
-            .show(d)
-        }
-      }
-      // always show outline on hover
-      d3.select(this)
-        .attr("stroke-width", "1.5px")
-        .attr("stroke", "#000")
+      vis.zeromarker = vis.svg
+        .append("circle")
+        .attr("r", 3)
+        .attr("fill", 'black')
+        .attr('transform', `translate(0, ${d.y})`)
+
+// vis.center = vis.svg
+//   .append("circle")
+//   .attr("r", 3)
+//   .attr("fill", 'black')
+//   .attr('transform', `translate(${d.x}, ${d.y})`)
+
+      vis.widthmarker = vis.svg
+        .append("circle")
+        .attr("r", 3)
+        .attr("fill", 'red')
+        .attr("transform", `translate(${window_width}, ${d.y})`)
+
+      vis.halfmarker = vis.svg
+        .append("circle")
+        .attr("r", 3)
+        .attr("fill", "yellow")
+        .attr("transform", `translate(${Math.round(window_width * 0.5)}, ${d.y})`)
+
+      //console.log(">>> half marker at: " + window_width*0.5)
+
+      vis.twothirdsmarker = vis.svg
+        .append("circle")
+        .attr("r", 3)
+        .attr("fill", 'blue')
+        .attr("transform", `translate(${Math.round(window_width * 0.67)}, ${d.y})`)
+/////////////////////
+
+      vis.showTooltipOnMouseover(d, this)
     })
     .on("mouseout", function(d) {
-      if (vis.nodeSelected !== this) {
-        // set stroke to none on mouseout if not mousing over a selected node and nothing is selected
-        d3.select(this)
-          .attr("stroke", "none")
-        // only hide tooltip if no node is selected
-        if (!vis.nodeSelected) vis.tip.hide(d);
-      }
+      vis.hideTooltipOnMouseout(d, this)
     })
     .on("click", function(d) {
-      var circle = this;
-      if (!vis.nodeSelected) {
-        // if clicking a node and nothing is selected, select it and show tooltip
-        vis.nodeSelected = this;
-        vis.tip.hide(d).show(d);
-        d3.select(this)
-          .attr("stroke-width", '1.5px')
-          .attr("stroke", "#000")
-
-      } else if (vis.nodeSelected === this) {
-        // if clicking a node that is already selected, unselect it and hide tooltip
-        vis.resetTooltip()
-
-      } else if (vis.nodeSelected && vis.nodeSelected !== this) {
-        // if clicking a node and a different node is already selected, unselect it and select this one
-        var previous = vis.nodeSelected
-        d3.select(previous)
-          .attr("stroke", 'none')
-        vis.tip.hide(d).show(d);
-        vis.nodeSelected = this;
-        d3.select(this)
-          .attr("stroke-width", '1.5px')
-          .attr("stroke", "#000")
-      }
-      // blocks circle clicks from propagating to the global click event handler at the top of updateVis method
+      vis.showTooltipOnSelect(d, this);
+      // block circle clicks from propagating to the global click event handler at the top of updateVis method
       d3.event.stopPropagation()
     })
     .merge(vis.circles) // update vis with new data
@@ -312,38 +296,140 @@ function isRootNode(node) {
 }
 
 /*
+ * @param d -- circlepack hierarchy node
+ * Hides tooltip and removes circle highlight
+ */
+Circlepack.prototype.resetTooltip = function() {
+  let vis = this
+  vis.unHighlight(vis.nodeSelected)
+  vis.nodeSelected = undefined;
+  vis.tip.hide();
+}
+
+/*
+ * @param d -- circlepack hierarchy node
+ * @param circleSelect -- d3 circle selection
+ * Hides tooltips on mouseout
+ */
+Circlepack.prototype.hideTooltipOnMouseout = function(d, circle) {
+  var vis = this
+  // set stroke to none on mouseout if not mousing over a selected node and nothing is selected
+  if (vis.nodeSelected !== circle) {
+    vis.unHighlight(circle)
+    // only hide tooltip if no nodes are currently selected
+    if (!vis.nodeSelected) vis.tip.hide(d);
+  }
+}
+
+/*
+ * @param d -- circlepack hierarchy node
+ * @param circleSelect -- d3 circle selection
+ * Shows tooltip for a circle
+ */
+Circlepack.prototype.showTooltipOnMouseover = function(d, circle) {
+  let vis = this;
+  let circle_x = d.x;
+  let circleSelect = d3.select(circle)
+  let el = document.getElementById(vis.parentElement)
+  let circlepack_width = el.offsetWidth;
+
+  // only show tooltip on hover if none are selected
+  if (!vis.nodeSelected) {
+    // console.log("show w tooltip?" + showWestwardTooltip(circle_x, circlepack_width))
+    // always show eastward tooltip if the screen width is too small to show left tooltip
+    // if (showWestwardTooltip1(circle_x, circleSelect, circlepack_width)) {
+    // if (showWestwardTooltip(circle_x / vis.width, circlepack_width)) { // if (circle_x > circlepack_width * 0.67) { //
+    //TODO: remove above trials
+    console.log(`${circle_x} / ${vis.width} = ${circle_x / circlepack_width}`)
+    if (circle_x / vis.width >= 0.67) {
+      vis.tip.hide(d)
+        .direction('w').offset([-5,-12])
+        .show(d)
+    }  else {
+      vis.tip.hide(d)
+        .direction('e').offset([-5,12])
+        .show(d)
+    }
+  }
+  // always show outline on hover
+  vis.highlight(circle)
+}
+
+/*
+ * @param d -- circlepack hierarchy node
+ * @param circleSelect -- d3 circle selection
+ * Shows tooltip when a circle is clicked
+ */
+Circlepack.prototype.showTooltipOnSelect = function(d, circle) {
+  let vis = this;
+
+  //console.log("selected d: ")
+  //console.log(d)
+  // if clicking a node and nothing is selected, select it, highlight it, and show tooltip
+  if (!vis.nodeSelected) {
+    vis.nodeSelected = circle;
+    vis.highlight(circle)
+    vis.tip.hide(d).show(d);
+
+  // if clicking a node that is already selected, unselect it and hide tooltip
+  } else if (circle === vis.nodeSelected) {
+    vis.resetTooltip()
+
+  // if clicking a node and a different node is already selected, unselect it and select this one
+  } else if (vis.nodeSelected && vis.nodeSelected !== circle) {
+    let previous = vis.nodeSelected
+    vis.tip.hide(d).show(d);
+    vis.unHighlight(previous)
+    vis.nodeSelected = circle;
+    vis.highlight(circle)
+  }
+}
+
+Circlepack.prototype.highlight = function(circle) {
+  d3.select(circle)
+    .attr("stroke-width", '1.5px')
+    .attr("stroke", "#000")
+}
+
+Circlepack.prototype.unHighlight = function(circle) {
+  d3.select(circle)
+    .attr("stroke", 'none')
+}
+
+function showWestwardTooltip1(circleX, circleSelection, svg_width) {
+  const TOOLTIP_BUFFER = 0;
+  const MAX_TOOLTIP_WIDTH = 350;
+  let window_width = document.documentElement.clientWidth;
+  let r = circleSelection.attr("r")
+  let TOOLTIP_X_LIMIT = window_width - TOOLTIP_BUFFER - MAX_TOOLTIP_WIDTH - r;
+
+  if (window_width <= (2 * MAX_TOOLTIP_WIDTH + 400)) {
+    console.log("too small to draw westward tooltip")
+    // console.log(`svg_width (${svg_width}) <= 800`)
+    // console.log(`window_width (${window_width}) <= 800`)
+    return false;
+  }
+  console.log(`circleX (${circleX}) >= TOOLTIP_X_LIMIT (${TOOLTIP_X_LIMIT})?`)
+  return circleX >= TOOLTIP_X_LIMIT;
+}
+
+/*
  * @param circleX -- circle x position
  * @param circleSelection -- d3 selection of a circlepack hierarchy node; eg. var circleSelection = d3.select(this)
  * @return boolean -- true if we want to show a westward tooltip
  */
-function showWestwardTooltip(circleX, circleSelection) {
-  // show westward tooltip if circle x is far enough to the right of the screen
-  var TOOLTIP_BUFFER = 0;
-  var MAX_TOOLTIP_WIDTH = 350;
-  var TOOLTIP_X_LIMIT = document.documentElement.clientWidth - TOOLTIP_BUFFER - MAX_TOOLTIP_WIDTH - circleSelection.attr("r");
-  // console.log(`TOOLTIP_X_LIMIT = ${document.documentElement.clientWidth} - ${TOOLTIP_BUFFER} - ${MAX_TOOLTIP_WIDTH} - ${circleSelection.attr("r")}`)
-  // console.log(`${circleX} >= ${TOOLTIP_X_LIMIT} ?`)
+function showWestwardTooltip(scaled_circle_x, svg_width) {
+  const MAX_TOOLTIP_WIDTH = 350;
+  let TOOLTIP_X_LIMIT = svg_width * 0.67;
 
-  // .direction(function(d) { return vis.direction })
-  // .offset(function(d){
-  //   // console.log("current direction: " + vis.direction)
-  //   // console.log(d)
-  //   if (vis.direction == 'n') { return [-12,-5] }
-  //   else if (vis.direction =='s') { return [12,-5] }
-  //   else if (vis.direction =='e') { return [-5,12] }
-  //   else if (vis.direction =='w') { return [-5,-12] }
-  // })
-
-  return circleX >= TOOLTIP_X_LIMIT;
-}
-
-
-Circlepack.prototype.resetTooltip = function(d) {
-  var vis = this
-  d3.select(vis.nodeSelected)
-    .attr("stroke", 'none')
-  vis.nodeSelected = undefined;
-  vis.tip.hide();
+  // attempt to approximate if window size is too small to draw a westward tooltip
+  // otherwise tooltip will go off the page
+  if (svg_width <= (2 * MAX_TOOLTIP_WIDTH + 100)) {
+    return false;
+  } else {
+    // show westward tooltip if circle x is far enough to the right of the screen
+    return scaled_circle_x > (svg_width * 0.67);
+  }
 }
 
 /*

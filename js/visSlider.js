@@ -5,12 +5,10 @@
  */
 VisSlider = function(_parentElement, _data){
   this.parentElement = _parentElement;
-  // this.svg = _svgElement;
   this.data = _data;
 
   this.initVis();
 }
-
 
 VisSlider.prototype.initVis = function() {
   let vis = this;
@@ -40,12 +38,12 @@ VisSlider.prototype.initVis = function() {
     .height(20)
     .marks(tickValues)
     .tickValues(tickValues)
-    .fill('#b0c9d0') //#d4dfe2 //rgb(199, 217, 222) //rgb(176, 201, 208)
+    .fill('#b0c9d0')
     .on("onchange", val => {
       d3.event.sourceEvent.stopPropagation();
       sliderChanged(val)
     });
 
-  var gTime = vis.svg.call(slider)
+  vis.svg.call(slider)
 
 }
