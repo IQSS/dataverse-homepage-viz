@@ -1,5 +1,6 @@
 var allData = {};
 var circlepack;
+var slider;
 
 async function loadData(){
 
@@ -17,9 +18,21 @@ async function loadData(){
 }
 
 function createVis(){
-  console.log("createVis");
+  // console.log("createVis");
   circlepack = new Circlepack("circlepack", allData);
+  slider = new VisSlider("slider", allData);
 }
+
+function sliderChanged(value) {
+  circlepack.wrangleData(value)
+}
+
+function onresize() {
+  // tell circlepack to reset the tooltip
+  circlepack.resetTooltip();
+}
+
+window.addEventListener("resize", onresize);
 
 // Start vis application
 loadData();

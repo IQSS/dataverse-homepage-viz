@@ -6,8 +6,8 @@
 Circlepack = function(_parentElement, _data){
 	this.parentElement = _parentElement;
 	this.data = _data;
-	this.nodeSelected; // the current node that is selected
-  // this.direction = 'e';
+	this.displayData = {};
+	this.nodeSelected; // the current circle node that is selected
 
   this.initVis();
 }
@@ -21,10 +21,9 @@ function getRandomInt(min, max) {
 /*
  * Initialize visualization (static content; e.g. SVG area, axes)
  */
- Circlepack.prototype.initVis = function(){
+Circlepack.prototype.initVis = function() {
    // Padding and margins
    var vis = this;
-   console.log("initVis");
    vis.margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
    var totalWidth = document.getElementById(vis.parentElement).offsetWidth
@@ -40,7 +39,7 @@ function getRandomInt(min, max) {
       .attr("width", "100%")
       .attr("height", "100%")
       .append("g")
-	    .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
+	    // .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
 
    // Scales and axes
 
@@ -53,27 +52,33 @@ function getRandomInt(min, max) {
 
   // Legend
 
-   // Tooltip
-   // References: https://github.com/caged/d3-tip/blob/master/examples/arrow-styles.html
+  // Tooltip
+  // References: https://github.com/caged/d3-tip/blob/master/examples/arrow-styles.html
   vis.tip = d3.tip()
     .attr("class", "tooltip")
-    .offset([-5,12]).direction('e')
+    .attr("id", "tooltip-id")
+    .offset([-5,12])
+    .direction('e')
     .html(function(d) {
       return vis.formatTooltip(d)
-    });
+    })
     vis.svg.call(vis.tip);
 
    vis.wrangleData();
- }
+}
 
  /*
  *  Data wrangling
  */
-Circlepack.prototype.wrangleData = function(){
+Circlepack.prototype.wrangleData = function(sliderMax = null){
   var vis = this;
-  console.log("wrangleData");
+
+  // first make another copy of vis.data using spread operator
+  vis.displayData = { ...vis.data };
 
   //Filter data
+  // then filter out children we won't be displaying based on slider value
+  vis.displayData.children = vis.displayData.children.filter(child => sliderMax ? child.diff <= sliderMax : true);
 
   // Label and enhance data
   // console.log(vis.data);
@@ -94,7 +99,7 @@ Circlepack.prototype.wrangleData = function(){
   // levels(vis.data, 0);
 
   vis.root = d3
-    .hierarchy(vis.data)
+    .hierarchy(vis.displayData)
     .sum(function(d) {
       //return d.size;
       return 10;
@@ -109,13 +114,13 @@ Circlepack.prototype.wrangleData = function(){
       // -- https://github.com/d3/d3-hierarchy#node_sort
     });
 
-    // Config pack function
-    vis.pack = d3.pack()
-      .size([vis.width, vis.height])
-      // For nested circles, the distance between the circle itself and circles inside it.
-      .padding(4);
-    // Invoke pack function
-    vis.nodes = vis.pack(vis.root).descendants();
+  // Config pack function
+  vis.pack = d3.pack()
+    .size([vis.width, vis.height])
+    // For nested circles, the padding between tangent circles
+    .padding(4);
+  // Invoke pack function
+  vis.nodes = vis.pack(vis.root).descendants();
 
   vis.updateVis();
 }
@@ -142,13 +147,6 @@ Circlepack.prototype.updateVis = function(){
 
   vis.circles.enter()
     .append("circle")
-    .attr("r", d => d.r)
-    .attr("transform", function(d){
-        return `translate(${d.x}, ${d.y})`;
-      // let x = getRandomInt(0,vis.width);
-      // let y = getRandomInt(0, vis.height);
-      // return "translate(" + x + "," + y + ")";
-    })
     .attr("class", function(d) {
       // "?" is the ternary operator
       return d.parent
@@ -157,56 +155,45 @@ Circlepack.prototype.updateVis = function(){
           : "node node--leaf"
         : "node node--root";
     })
+    .attr("r", d => d.r)
+    .attr("transform", function(d){
+      return `translate(${d.x}, ${d.y})`;
+    })
     .style("fill", function(d){
-      return d.children ? vis.color(d.depth) : null;
+      return d.children ? vis.color(d.depth) : 'white';
     })
     .on("mouseover", function(d) {
-      // only show tooltip on hover if none are selected
-      if (!vis.nodeSelected) vis.tip.hide(d).show(d)
-      // always show outline on hover
-      d3.select(this)
-        .attr("stroke-width", "1.5px")
-        .attr("stroke", "#000")
+      vis.showTooltipOnMouseover(d, this)
     })
     .on("mouseout", function(d) {
-      if (vis.nodeSelected !== this) {
-        // set stroke to none on mouseout if not mousing over a selected node and nothing is selected
-        d3.select(this)
-          .attr("stroke", "none")
-        // only hide tooltip if no node is selected
-        if (!vis.nodeSelected) vis.tip.hide(d);
-      }
+      vis.hideTooltipOnMouseout(d, this)
     })
     .on("click", function(d) {
-      if (!vis.nodeSelected) {
-        // if clicking a node and nothing is selected, select it and show tooltip
-        vis.nodeSelected = this;
-        vis.tip.hide(d).show(d);
-        d3.select(this)
-          .attr("stroke-width", '1.5px')
-          .attr("stroke", "#000")
-
-      } else if (vis.nodeSelected === this) {
-        // if clicking a node that is already selected, unselect it and hide tooltip
-        vis.resetTooltip()
-
-      } else if (vis.nodeSelected && vis.nodeSelected !== this) {
-        // if clicking a node and a different node is already selected, unselect it and select this one
-        var previous = vis.nodeSelected
-        d3.select(previous)
-          .attr("stroke", 'none')
-        vis.tip.hide(d).show(d);
-        vis.nodeSelected = this;
-        d3.select(this)
-          .attr("stroke-width", '1.5px')
-          .attr("stroke", "#000")
-      }
-      // blocks circle clicks from propagating to the global click event handler above
+      vis.showTooltipOnSelect(d, this);
+      // block circle clicks from propagating to the global click event handler at the top of updateVis
       d3.event.stopPropagation()
     })
+    .merge(vis.circles) // update vis with new data
+    .attr("class", function(d) {
+      // "?" is the ternary operator
+      return d.parent
+        ? d.children
+          ? "node"
+          : "node node--leaf"
+        : "node node--root";
+    })
+    .attr("r", d => d.r)
+    .attr("transform", function(d){
+      return `translate(${d.x}, ${d.y})`;
+    })
+    .style("fill", function(d){
+      return d.children ? vis.color(d.depth) : 'white';
+    })
 
-    // Remove old data
-    // Update axes
+  // Remove old data
+  vis.circles.exit().remove();
+
+  // Update axes
 
 }
 
@@ -223,8 +210,8 @@ var formatDate = d3.timeFormat("%b %e, %Y");
 
 // Set the transition duration
 // Usage: d3.select("circle").transition(t)
-var t = d3.transition()
-  .duration(500)
+// var t = d3.transition()
+//   .duration(500)
 
 /*
  * @param node -- circlepack hierarchy node
@@ -257,12 +244,99 @@ function isRootNode(node) {
   return !node.parent
 }
 
-Circlepack.prototype.resetTooltip = function(d) {
-  var vis = this
-  d3.select(vis.nodeSelected)
-    .attr("stroke", 'none')
+
+//////////////////////////////////////////
+/*      PROTOTYPE HELPER METHODS        */
+//////////////////////////////////////////
+
+/*
+ * Hides tooltip and removes circle highlight
+ */
+Circlepack.prototype.resetTooltip = function() {
+  let vis = this
+  vis.unHighlight(vis.nodeSelected)
   vis.nodeSelected = undefined;
   vis.tip.hide();
+}
+
+/*
+ * @param d -- circlepack hierarchy node
+ * @param circle -- d3 circle selection
+ * Hide tooltips on mouseout
+ */
+Circlepack.prototype.hideTooltipOnMouseout = function(d, circle) {
+  var vis = this
+  // set stroke to none on mouseout if not mousing over a selected node and nothing is selected
+  if (vis.nodeSelected !== circle) {
+    vis.unHighlight(circle)
+    // only hide tooltip if no nodes are currently selected
+    if (!vis.nodeSelected) vis.tip.hide(d);
+  }
+}
+
+/*
+ * @param d -- circlepack hierarchy node
+ * @param circle -- d3 circle selection
+ * Shows tooltip for a circle. Set the direction to east or to the west
+ */
+Circlepack.prototype.showTooltipOnMouseover = function(d, circle) {
+  let vis = this;
+  let circle_x = d.x;
+
+  // only show tooltip on hover if none are selected
+  if (!vis.nodeSelected) {
+    // if scaled circle_x position is in the right third of the screen, draw a westward tooltip
+    if (circle_x / vis.width >= 0.67) {
+      vis.tip.hide(d)
+        .direction('w').offset([-5,-12])
+        .show(d)
+    }  else {
+      vis.tip.hide(d)
+        .direction('e').offset([-5,12])
+        .show(d)
+    }
+  }
+  // always show outline on hover
+  vis.highlight(circle)
+}
+
+/*
+ * @param d -- circlepack hierarchy node
+ * @param circle -- d3 circle selection
+ * Shows tooltip when a circle is clicked
+ */
+Circlepack.prototype.showTooltipOnSelect = function(d, circle) {
+  let vis = this;
+
+  // if clicking a node and nothing is selected, select it, highlight it, and show tooltip
+  if (!vis.nodeSelected) {
+    vis.nodeSelected = circle;
+    vis.highlight(circle)
+    vis.tip.hide(d).show(d);
+
+  // if clicking a node that is already selected, unselect it and hide tooltip
+  } else if (circle === vis.nodeSelected) {
+    vis.resetTooltip()
+
+  // if clicking a node and a different node is already selected, unselect it and select this one
+  } else if (vis.nodeSelected && vis.nodeSelected !== circle) {
+    let previous = vis.nodeSelected
+    vis.tip.hide(d).show(d);
+    vis.unHighlight(previous)
+    vis.nodeSelected = circle;
+    vis.highlight(circle)
+  }
+}
+
+Circlepack.prototype.highlight = function(circle) {
+  d3.select(circle)
+    .attr("stroke-width", '1.5px')
+    .attr("stroke", "#000")
+}
+
+Circlepack.prototype.unHighlight = function(circle) {
+  d3.select(circle)
+    .attr("stroke", 'none')
 }
 
 /*
@@ -309,6 +383,7 @@ Circlepack.prototype.formatTooltip = function(d) {
     }
     children_html = children_html.concat(`</ul>`)
   }
-  return '<div class="tooltip-details">' + title_html + date_html + children_html + diff + '</div">'
+  // return '<div class="tooltip-details">' + title_html + date_html + children_html + diff + '</div">'
+  return '<div class="tooltip-details">' + title_html + date_html + children_html + '</div">'
 }
 
