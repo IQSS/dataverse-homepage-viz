@@ -250,7 +250,6 @@ function isRootNode(node) {
 //////////////////////////////////////////
 
 /*
- * @param d -- circlepack hierarchy node
  * Hides tooltip and removes circle highlight
  */
 Circlepack.prototype.resetTooltip = function() {
