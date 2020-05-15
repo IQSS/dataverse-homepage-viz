@@ -211,8 +211,8 @@ var formatDate = d3.timeFormat("%b %e, %Y");
 
 // Set the transition duration
 // Usage: d3.select("circle").transition(t)
-var t = d3.transition()
-  .duration(500)
+// var t = d3.transition()
+//   .duration(500)
 
 /*
  * @param node -- circlepack hierarchy node
@@ -251,7 +251,6 @@ function isRootNode(node) {
 //////////////////////////////////////////
 
 /*
- * @param d -- circlepack hierarchy node
  * Hides tooltip and removes circle highlight
  */
 Circlepack.prototype.resetTooltip = function() {
@@ -263,7 +262,7 @@ Circlepack.prototype.resetTooltip = function() {
 
 /*
  * @param d -- circlepack hierarchy node
- * @param circleSelect -- d3 circle selection
+ * @param circle -- d3 circle selection
  * Hide tooltips on mouseout
  */
 Circlepack.prototype.hideTooltipOnMouseout = function(d, circle) {
@@ -278,20 +277,16 @@ Circlepack.prototype.hideTooltipOnMouseout = function(d, circle) {
 
 /*
  * @param d -- circlepack hierarchy node
- * @param circleSelect -- d3 circle selection
+ * @param circle -- d3 circle selection
  * Shows tooltip for a circle. Set the direction to east or to the west
  */
 Circlepack.prototype.showTooltipOnMouseover = function(d, circle) {
   let vis = this;
   let circle_x = d.x;
-  // let circleSelect = d3.select(circle)
-  // let el = document.getElementById(vis.parentElement)
-  // let circlepack_width = el.offsetWidth;
 
   // only show tooltip on hover if none are selected
   if (!vis.nodeSelected) {
     // if scaled circle_x position is in the right third of the screen, draw a westward tooltip
-    // console.log(`${circle_x} / ${vis.width} = ${circle_x / circlepack_width}`)
     if (circle_x / vis.width >= 0.67) {
       vis.tip.hide(d)
         .direction('w').offset([-5,-12])
@@ -308,7 +303,7 @@ Circlepack.prototype.showTooltipOnMouseover = function(d, circle) {
 
 /*
  * @param d -- circlepack hierarchy node
- * @param circleSelect -- d3 circle selection
+ * @param circle -- d3 circle selection
  * Shows tooltip when a circle is clicked
  */
 Circlepack.prototype.showTooltipOnSelect = function(d, circle) {
@@ -389,7 +384,7 @@ Circlepack.prototype.formatTooltip = function(d) {
     }
     children_html = children_html.concat(`</ul>`)
   }
+  // return '<div class="tooltip-details">' + title_html + date_html + children_html + diff + '</div">'
   return '<div class="tooltip-details">' + title_html + date_html + children_html + '</div">'
-  // + diff
 }
 
