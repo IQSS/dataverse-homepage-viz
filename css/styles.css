@@ -2,11 +2,6 @@
   cursor: pointer;
 }
 
-.node:hover {
-  stroke: #000;
-  stroke-width: 1.5px;
-}
-
 .node--leaf {
   fill: white;
 }
@@ -17,27 +12,123 @@
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
 
-.label,
-.node--root,
-.node--leaf {
-  pointer-events: none;
-}
-
 .node--root {
   display: none;
 }
 
-.tooltip-details {
-  position: absolute;
-  z-index: 10;
-  opacity: 0;
-  background-color: white;
-  border: solid;
-  border-width: 2px;
-  border-radius: 5px;
-  padding: 5px;
-}
-
+/* VIS SIZING AND RESPONSIVENESS STYLES */
 .vis-svg {
   background: rgb(217, 224, 227);
 }
+
+/*    TOOLTIP STYLES    */
+.tooltip a {
+  color: unset;
+  text-decoration: unset;
+}
+
+.tooltip-title {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.tooltip {
+  line-height: 1.5;
+  padding: 12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  opacity: 0.5;
+  background-color: white;
+  border-width: 2px;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.2);
+  max-width: 350px; /* max tooltip width */
+  min-width: unset;
+}
+
+.tooltip-dataverse {
+  color: rgb(194, 107, 53);
+}
+.tooltip-dataset {
+  color: rgb(73, 134, 190);
+}
+.tooltip-date {
+  font-size: 18px;
+  color: rgb(130,130,130)
+  /*font-weight: 400;*/
+}
+.tooltip-desc {
+  display: list-item;
+  margin-bottom: 5px;
+  font-size: 18px;
+  /*font-weight: 400;*/
+}
+ul {
+  padding-inline-start: 30px
+}
+
+/* Creates a small triangle extender for the tooltip */
+/* Reference: https://github.com/caged/d3-tip/blob/master/examples/example-styles.css */
+.tooltip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: white;
+  position: absolute;
+  /* 'pointer-events: none' is needed so that hovering over triangle extender of
+  a westward tooltip does not interfere with circle hover */
+  pointer-events: none;
+}
+
+/* Northward tooltips */
+.tooltip.n:after {
+  content: "\25BC";
+  margin: -4px 0 0 0;
+  top: 100%;
+  left: 50%;
+  /*text-align: center;*/
+}
+
+/* Adds the left arrow on the tooltip */
+.tooltip.e:after {
+  content: "\25C0";
+  margin: -4px 0 0 0;
+  top: 50%;
+  left: -8px;
+}
+
+/* Southward tooltips */
+.tooltip.s:after {
+  content: "\25B2";
+  margin: 0 0 4px 0;
+  top: -8px;
+  left: 50%;
+
+}
+
+/* Westward tooltips */
+.tooltip.w:after {
+  content: "\25B6";
+  margin: -4px 0 0 -4px;
+  top: 50%;
+  left: 100%;
+}
+
+/* OLD BASIC TOOLTIP STYLES */
+/*.tooltip {*/
+/*  position: absolute;*/
+/*  z-index: 10;*/
+/*  opacity: 0;*/
+/*  background-color: white;*/
+/*  border: solid;*/
+/*  border-width: 2px;*/
+/*  border-radius: 5px;*/
+/*  padding: 5px;*/
+/*}*/
+
