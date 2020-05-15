@@ -39,7 +39,8 @@ Circlepack.prototype.initVis = function() {
       .attr("width", "100%")
       .attr("height", "100%")
       .append("g")
-	    // .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
+	    // .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`)
+      ;
 
    // Scales and axes
 
@@ -47,7 +48,7 @@ Circlepack.prototype.initVis = function() {
    vis.color = d3
      .scaleLinear()
      .domain([-1, 5])
-     .range(["hsl(38,76%,80%)", "hsl(38,76%,33%)"])
+     .range(["hsl(38,76%,80%)", "hsl(18,100%,27%)"])
      .interpolate(d3.interpolateHcl);
 
   // Legend
@@ -70,7 +71,7 @@ Circlepack.prototype.initVis = function() {
  /*
  *  Data wrangling
  */
-Circlepack.prototype.wrangleData = function(sliderMax = null){
+Circlepack.prototype.wrangleData = function(sliderMax = 30){
   var vis = this;
 
   // first make another copy of vis.data using spread operator
@@ -346,10 +347,10 @@ Circlepack.prototype.unHighlight = function(circle) {
 Circlepack.prototype.formatTooltip = function(d) {
   var title_html = ''
   var children_html = ''
-  var style_tag = ''
+  var obj_type = ''
 
   /*temporary for debugging:*/
-  var diff = `<div class="tooltip-diff">${d.data.diff}</div>`
+  //var diff = `<div class="tooltip-diff">${d.data.diff}</div>`
 
   // if date is present parse string as a Date and format it
   var date_label = d.data.date ? formatDate(parseDateTime(d.data.date)) : 'Date unknown'
@@ -358,27 +359,27 @@ Circlepack.prototype.formatTooltip = function(d) {
 
   // if current node you're hovering over is a dataset, construct dataset title only
   if (isDataset(d)) {
-    title_html = `<div class="tooltip-dataset tooltip-title"><a href="${title_link}" target="_blank">${d.data.name}</a></div>`
+    title_html = `<div class="tooltip-dataset tooltip-title"><span class="icon icon-dataset"/> <a href="${title_link}">${d.data.name}</a></div>`
 
   // else if it's a dataverse, construct a dataverse title and add children to the description section
   } else if (isDataverse(d)) {
-    title_html = `<div class="tooltip-dataverse tooltip-title"><a href="${title_link}" target="_blank">${d.data.name}</a></div>`
+    title_html = `<div class="tooltip-dataverse tooltip-title"><span class="icon icon-dataverse"/> <a href="${title_link}">${d.data.name}</a></div>`
     children_html = children_html.concat(`<ul>`)
 
     // if dataverse has more than 5 children show link to all datasets
     if (d.children.length > 5) {
-      style_tag = "tooltip-dataset"
-      children_html = children_html.concat(`<li class="${style_tag} tooltip-desc"><a href="${title_link}" target="_blank">All datasets</a></li>`)
+      obj_type = "dataset"
+      children_html = children_html.concat(`<li class="tooltip-${obj_type} tooltip-desc"><a href="${title_link}">ALL DATASETS <span class="glyphicon glyphicon-chevron-right"></span></a></li>`)
 
     } else {
       // else show all children
       d.children.forEach(child => {
         if (isDataset(child)) {
-          style_tag = "tooltip-dataset"
+          obj_type = "dataset"
         } else if (isDataverse(child)) {
-          style_tag = "tooltip-dataverse"
+          obj_type = "dataverse"
         }
-        children_html = children_html.concat(`<li class="${style_tag} tooltip-desc"><a href="${child.data.link}" target="_blank">${child.data.name}</a></li>`)
+        children_html = children_html.concat(`<li class="tooltip-${obj_type} tooltip-desc"><span class="icon icon-${obj_type}"/> <a href="${child.data.link}">${child.data.name}</a></li>`)
       })
     }
     children_html = children_html.concat(`</ul>`)
