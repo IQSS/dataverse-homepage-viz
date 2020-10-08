@@ -1,0 +1,7 @@
+{"db": "dvndb",
+ "password": "secret",
+ "port": 5432,
+ "type": "dev",
+ "user": "dvnapp",
+ "host": "127.0.0.1"
+ }
