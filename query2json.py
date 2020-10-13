@@ -6,6 +6,9 @@ from psycopg2 import sql
 from collections import defaultdict
 from datetime import datetime
 
+paramsFileName = sys.argv[1]
+outputFileName = sys.argv[2]
+
 data = defaultdict(dict)
 dates = defaultdict(dict)
 subjects = defaultdict(dict)
@@ -28,7 +31,7 @@ final['children'] = []
 seen = defaultdict(dict)
 
 #get DB connection params from a file
-with open('params.txt') as f:
+with open(paramsFileName) as f:
     params = json.load(f)
 
 databaseName = params["db"]
@@ -317,13 +320,7 @@ order by dataset_publication_date desc; """
 # Serializing json
     json_object = json.dumps(final, indent=2, sort_keys=True, default=str)
 
-    import os.path
-    directory = './data/'
-    filename = "data.json"
-    file_path = os.path.join(directory, filename)
-    if not os.path.isdir(directory):
-        os.mkdir(directory)
-    outfile = open(file_path, "w")
+    outfile = open(outputFileName, "w")
     outfile.write(json_object)
     outfile.close()
 
