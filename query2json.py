@@ -5,6 +5,7 @@ import sys
 from psycopg2 import sql
 from collections import defaultdict
 from datetime import datetime
+from datetime import date
 
 paramsFileName = sys.argv[1]
 outputFileName = sys.argv[2]
@@ -16,15 +17,22 @@ titles = defaultdict(dict)
 
 def getSubjects(x):
         cur = connection.cursor()
-        queryString1 = """ select string_agg(cvv.strvalue, '; ') from dataverseSubjects ds join controlledvocabularyvalue cvv on
+        queryString1 = """ select cvv.strvalue from dataverseSubjects ds join controlledvocabularyvalue cvv on
         ds.controlledvocabularyvalue_id = cvv.id
         join dataverse dv on dv.id = ds.dataverse_id
         where dv.alias = '""" + x +"'"
         cur.execute(queryString1)
-        row = cur.fetchone()
-        return row
+        subjectString = ""
+        while 1:
+            row = cur.fetchone()
+            if row == None:
+                break
 
-oldest_date = datetime.strptime('9999-12-31', '%Y-%m-%d')
+            rowStr = row[0]
+            subjectString = subjectString + " " + rowStr + "; "
+
+        return subjectString
+
 final = {}
 final['name'] = 'root'
 final['children'] = []
@@ -167,7 +175,6 @@ dataset_identifier
 order by dataset_publication_date desc; """
 
     queryString = queryString1 + subString + queryString2
-
     cur.execute(queryString)
 
     while 1:
@@ -192,16 +199,14 @@ order by dataset_publication_date desc; """
         dv4alias = str(row[13])
         dspubdate = row[16]
         subjectString = str(row[15])
-        dates[dv1alias] = datetime.strptime('1900-01-01', '%Y-%m-%d')
+        dates[dv1alias] = '0000-00-00'
         dataset_identifier = row[17]
         title = str(row[2])
         fileid = row[0]
 
-        if dspubdate > dates[dv1alias]:
-            dates[dv1alias] = dspubdate
-
-        if oldest_date > dspubdate:
-            oldest_date = dspubdate
+        pubdateCompare = dspubdate.strftime('%Y-%m-%d')
+        if pubdateCompare > dates[dv1alias]:
+            dates[dv1alias] = pubdateCompare
 
         titles[dataset_identifier] = title
         titles[dv1alias] = dv1name
@@ -209,21 +214,20 @@ order by dataset_publication_date desc; """
         titles[dv3alias] = dv3name
         titles[dv4alias] = dv4name
 
-        dates[dataset_identifier] = dspubdate.strftime('%Y-%m-%d')
-        dates[dv1alias] = dspubdate
-        dates[dv2alias] = dspubdate.strftime('%Y-%m-%d')
-        dates[dv3alias] = dspubdate.strftime('%Y-%m-%d')
-        dates[dv4alias] = dspubdate.strftime('%Y-%m-%d')
+        dates[dataset_identifier] = pubdateCompare
+        dates[dv2alias] = pubdateCompare
+        dates[dv3alias] = pubdateCompare
+        dates[dv4alias] = pubdateCompare
 
         subjects[dataset_identifier] = subjectString
         if dv1alias != 'None':
-            subjects[dv1alias] = getSubjects(dv1alias)
+            subjects[dv1alias] = str(getSubjects(dv1alias))
         if dv2alias != 'None':
-            subjects[dv2alias] = getSubjects(dv2alias)
+            subjects[dv2alias] = str(getSubjects(dv2alias))
         if dv3alias != 'None':
-            subjects[dv3alias] = getSubjects(dv3alias)
+            subjects[dv3alias] = str(getSubjects(dv3alias))
         if dv4alias != 'None':
-            subjects[dv4alias] = getSubjects(dv4alias)
+            subjects[dv4alias] = str(getSubjects(dv4alias))
 
         #print("%-20s > %-20s > %-20s > %-20s > %-20s" % (dv1name[:20], dv2name[:20], dv3name[:20], title[:20], filename[:20]))
         if dv4alias != 'None':
@@ -266,17 +270,19 @@ order by dataset_publication_date desc; """
 
 
     for corkey, corval in data.items():
-        timestamp_format = '%Y-%m-%d'
-        level1 = {}
-        level1['name'] = titles[corkey]
 
+        level1 = {}
+        level1['children'] = []
+        level1['name'] = titles[corkey]
         level1['subjects'] = subjects[corkey]
         level1['identifier']=corkey
-        t1 = oldest_date
-        t2 = dates[corkey]
-        days = t2 - t1
+
+        timestamp_format = '%Y-%m-%d'
+        t1 = datetime.strptime(str(datetime.now().date()), timestamp_format)
+        t2 = datetime.strptime(dates[corkey], timestamp_format)
+
+        days = t1 - t2
         level1['diff'] = days.days
-        level1['children'] = []
         level1['date'] = t2.strftime('%Y-%m-%d')
 
         for gcorkey, gcorval in corval.items():
@@ -299,16 +305,14 @@ order by dataset_publication_date desc; """
                             level4['name'] = titles[gggcorkey]
                             level4['children'] = []
                             level4['identifier']=gggcorkey
-                            l4Date = dates[gggcorkey]
-                            level4['date'] = l4Date
+                            level4['date'] = dates[gggcorkey]
                             level4['subjects'] = subjects[gggcorkey]
                             if isinstance(gggcorval,dict):
                                 for ggggcorkey, ggggcorval in gggcorval.items():
                                     level5 = {}
                                     level5['name'] = titles[ggggcorkey]
                                     level5['identifier']=ggggcorkey
-                                    pubDate =  dates[ggggcorkey]
-                                    level5['pubDate'] = pubDate
+                                    level5['pubDate'] = dates[ggggcorkey]
                                     level4['children'].append(level5)
                             level3['children'].append(level4)
                     level3['name'] = titles[ggcorkey]
@@ -324,13 +328,13 @@ order by dataset_publication_date desc; """
     outfile.write(json_object)
     outfile.close()
 
+    print ("Visualization data updated in file " , outputFileName )
 
-except (Exception, psycopg2.Error) as error :
-        print ("Error processing data visualization json file see details:", error)
-        print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(error).__name__, error)
+except Exception as e :
+        print ("Error processing data visualization json file see details: " , e)
+        print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 finally:
-        #closing database connection.
-            print("Visualization data updated in file data.json")
+
             if(connection):
                 cur.close()
                 connection.close()
