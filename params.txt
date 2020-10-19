@@ -1,7 +1,7 @@
-{"db": "dvndb",
+{"db": "thedata_alt",
  "password": "secret",
  "port": 5432,
- "type": "dev",
+ "type": "production",
  "user": "dvnapp",
  "host": "127.0.0.1"
  }
