@@ -199,12 +199,16 @@ order by dataset_publication_date desc; """
         dv4alias = str(row[13])
         dspubdate = row[16]
         subjectString = str(row[15])
-        dates[dv1alias] = '0000-00-00'
+
+        if not(dates.has_key(dv1alias)):
+            dates[dv1alias] = '0000-00-00'
+
         dataset_identifier = row[17]
         title = str(row[2])
         fileid = row[0]
 
         pubdateCompare = dspubdate.strftime('%Y-%m-%d')
+
         if pubdateCompare > dates[dv1alias]:
             dates[dv1alias] = pubdateCompare
 
