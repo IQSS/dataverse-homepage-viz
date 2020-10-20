@@ -37,4 +37,4 @@ An example follows:
 
 This update should be run periodically to refresh to data. For example, to run the command every night at midnight:
 
-0 0 * * * python <scriptdir>/query2json.py <paramsdir>/params.txt <datadir>/data.json
+0 0 * * * python [scriptdir]/query2json.py [paramsdir]/params.txt [datadir]/data.json
