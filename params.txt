@@ -1,5 +1,5 @@
-{"db": "thedata_alt",
- "password": "secret",
+{"db": "dvndb",
+ "password": "password",
  "port": 5432,
  "type": "production",
  "user": "dvnapp",
