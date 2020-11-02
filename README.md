@@ -23,7 +23,7 @@ There are two files that are used to produce the json needed to display the Data
 - query2json.py
 - params.txt
 
-The python script connects to the database, runs a query to obtain the needed data, converts the output to json, and writes the json to an output file. The params.txt file contains the credentials needed to connect the database and a parameter for telling the script whether the database is a production database or a development database. These params are in json format.
+The python script connects to the database, runs a query to obtain the needed data, converts the output to json, and writes the json to an output file. The params.txt file contains the credentials needed to connect the database. These params are in json format.
 
 An example follows:
 
