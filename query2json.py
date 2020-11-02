@@ -119,7 +119,6 @@ select
 from filemetadata fmd, datasetversion dsv,
 datasetfieldvalue dsfv, datasetfield dsf,
 datasetfield dsfsub, datasetfield_controlledvocabularyvalue dsfcvv,
-datasetfieldtype dsftt,
 controlledvocabularyvalue cvv, dvobject dvo, dvobject dvods,
 dataverse level1dv, dataset, maxversion, filedatefilter, tree
 left outer join dataverse level2dv on tree.id_path[2] = level2dv.id
