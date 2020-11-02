@@ -31,8 +31,7 @@ An example follows:
  "password": "password",
  "port": 5432,
  "user": "dvnapp",
- "host": "127.0.0.1",
- "type": "production"
+ "host": "127.0.0.1"
 }
 
 This update should be run periodically to refresh to data. For example, to run the command every night at midnight:
