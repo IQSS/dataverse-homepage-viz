@@ -45,15 +45,8 @@ with open(paramsFileName) as f:
 databaseName = params["db"]
 passwordString = params["password"]
 port = params["port"]
-type = params["type"]
 host = params["host"]
 user = params["user"]
-
-#For dev databases, "subject" is 20.
-subString = 'and dsfsub.datasetfieldtype_id=20'
-#For Harvard's database, "subject" is 19.
-if type == 'production':
-    subString = 'and dsfsub.datasetfieldtype_id=19'
 
 try:
     connection = psycopg2.connect(user = user,
@@ -64,7 +57,7 @@ try:
 
     cur = connection.cursor()
 
-    queryString1 = """WITH RECURSIVE tree (id, dtype, owner_id, level, id_path) AS (
+    queryString = """WITH RECURSIVE tree (id, dtype, owner_id, level, id_path) AS (
     SELECT  id, dtype, owner_id, -1, ARRAY[id]
     FROM    dvobject
     WHERE   owner_id in (select id from dvobject where owner_id is null)
@@ -126,6 +119,7 @@ select
 from filemetadata fmd, datasetversion dsv,
 datasetfieldvalue dsfv, datasetfield dsf,
 datasetfield dsfsub, datasetfield_controlledvocabularyvalue dsfcvv,
+datasetfieldtype dsftt,
 controlledvocabularyvalue cvv, dvobject dvo, dvobject dvods,
 dataverse level1dv, dataset, maxversion, filedatefilter, tree
 left outer join dataverse level2dv on tree.id_path[2] = level2dv.id
@@ -140,9 +134,9 @@ and dsf.id = dsfv.datasetfield_id
 and fmd.datafile_id = dvo.id
 and dsf.datasetfieldtype_id=1
 -- We added dsfsub and dsfcvv to get subjects.
-and dsfsub.datasetversion_id = dsv.id """
-
-    queryString2 = """ and dsfsub.id = dsfcvv.datasetfield_id
+and dsfsub.datasetversion_id = dsv.id
+and dsfsub.datasetfieldtype_id=(select id from datasetfieldtype where name = 'subject')
+and dsfsub.id = dsfcvv.datasetfield_id
 and cvv.datasetfieldtype_id = dsfsub.datasetfieldtype_id
 and dsfcvv.controlledvocabularyvalues_id = cvv.id
 -- Make sure the dataset is published.
@@ -174,7 +168,6 @@ dataset_publication_date,
 dataset_identifier
 order by dataset_publication_date desc; """
 
-    queryString = queryString1 + subString + queryString2
     cur.execute(queryString)
 
     while 1:
@@ -342,4 +335,3 @@ finally:
             if(connection):
                 cur.close()
                 connection.close()
-                print("PostgreSQL connection is closed")

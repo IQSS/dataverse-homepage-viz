@@ -1,7 +1,6 @@
 {"db": "dvndb",
  "password": "password",
  "port": 5432,
- "type": "production",
  "user": "dvnapp",
  "host": "127.0.0.1"
  }
