@@ -6,13 +6,10 @@ Based on https://gist.github.com/mbostock/7607535
 
 ## To Hack on the Visualization:
 
-Python 3 (preferred)
+Python 3 
 
     python3 -m http.server
 
-Python 2
-
-    python -m SimpleHTTPServer
 
 Then visit <http://localhost:8000>
 
@@ -37,3 +34,9 @@ An example follows:
 This update should be run periodically to refresh to data. For example, to run the command every night at midnight:
 
 0 0 * * * python [scriptdir]/query2json.py [paramsdir]/params.txt [datadir]/data.json
+
+Note: Running this script requires the psycopg2 module (PostgreSQL client).
+We recommend that you try installing the "binary", pre-built version of the package:
+pip install psycopg2-binary
+(or "pip3 install psycopg2-binary" if you use python3 and it's
+installed separately on your system)
