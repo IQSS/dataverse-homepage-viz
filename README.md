@@ -30,6 +30,7 @@ An example follows:
 {"db": "dvndb",
  "port": 5432,
  "user": "dvnapp",
+ "password": "password",
  "host": "127.0.0.1"
 }
 
