@@ -28,7 +28,6 @@ The python script connects to the database, runs a query to obtain the needed da
 An example follows:
 
 {"db": "dvndb",
- "password": "password",
  "port": 5432,
  "user": "dvnapp",
  "host": "127.0.0.1"
