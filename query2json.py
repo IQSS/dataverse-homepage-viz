@@ -43,14 +43,12 @@ with open(paramsFileName) as f:
     params = json.load(f)
 
 databaseName = params["db"]
-passwordString = params["password"]
 port = params["port"]
 host = params["host"]
 user = params["user"]
 
 try:
     connection = psycopg2.connect(user = user,
-                                  password = passwordString,
                                   host = host,
                                   port = port,
                                   database = databaseName)
@@ -134,7 +132,7 @@ and fmd.datafile_id = dvo.id
 and dsf.datasetfieldtype_id=1
 -- We added dsfsub and dsfcvv to get subjects.
 and dsfsub.datasetversion_id = dsv.id
-and dsfsub.datasetfieldtype_id=(select id from datasetfieldtype where name = 'subject')
+and dsfsub.datasetfieldtype_id = (select id from datasetfieldtype where name = 'subject')
 and dsfsub.id = dsfcvv.datasetfield_id
 and cvv.datasetfieldtype_id = dsfsub.datasetfieldtype_id
 and dsfcvv.controlledvocabularyvalues_id = cvv.id
@@ -192,7 +190,7 @@ order by dataset_publication_date desc; """
         dspubdate = row[16]
         subjectString = str(row[15])
 
-        if not(dates.has_key(dv1alias)):
+        if not(dv1alias in dates):
             dates[dv1alias] = '0000-00-00'
 
         dataset_identifier = row[17]
