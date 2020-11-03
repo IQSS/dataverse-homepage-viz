@@ -46,11 +46,13 @@ databaseName = params["db"]
 port = params["port"]
 host = params["host"]
 user = params["user"]
+password = params["password"]
 
 try:
     connection = psycopg2.connect(user = user,
                                   host = host,
                                   port = port,
+                                  password = password,
                                   database = databaseName)
 
     cur = connection.cursor()
